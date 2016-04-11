@@ -34,6 +34,9 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
+## Include Directories
+INCLUDES = -I"C:\Users\Admin\Documents\GitHub\E7012E-Car-Project\E7012E-car-project\MCU_Controller" -I"C:\Users\Admin\Documents\GitHub\E7012E-Car-Project\E7012E-car-project\PID" 
+
 ## Objects that must be built in order to link
 OBJECTS = main.o 
 

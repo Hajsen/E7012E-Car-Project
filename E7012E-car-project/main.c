@@ -1,4 +1,14 @@
-void main()
+#include "PID.h"
+#include "MCU_Controller.h"
+
+int main()
 {
-	while(true);
+	startup();
+	while(1);
+}
+
+
+void startup()
+{
+	
 }
