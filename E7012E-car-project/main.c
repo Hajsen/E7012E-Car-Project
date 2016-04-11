@@ -1,7 +1,7 @@
 #include "PID.h"
 #include "MCU_Controller.h"
 
-#include "HW_setup.c"
+#include "HW_setup.h"
 
 int main()
 {
