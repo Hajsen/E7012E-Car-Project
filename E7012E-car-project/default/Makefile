@@ -38,7 +38,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 INCLUDES = -I"C:\Users\Admin\Documents\GitHub\E7012E-Car-Project\E7012E-car-project\MCU_Controller" -I"C:\Users\Admin\Documents\GitHub\E7012E-Car-Project\E7012E-car-project\PID" 
 
 ## Objects that must be built in order to link
-OBJECTS = main.o 
+OBJECTS = main.o PID.o resourceManager.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -48,6 +48,12 @@ all: $(TARGET) E7012E-car-project.hex E7012E-car-project.eep E7012E-car-project.
 
 ## Compile
 main.o: ../main.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+PID.o: ../PID/PID.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+resourceManager.o: ../resourceManager.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
