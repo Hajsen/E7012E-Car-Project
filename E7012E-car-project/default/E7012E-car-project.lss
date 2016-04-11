@@ -3,21 +3,21 @@ E7012E-car-project.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000000ce  00000000  00000000  00000054  2**1
+  0 .text         000000e6  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .debug_aranges 00000020  00000000  00000000  00000122  2**0
+  1 .debug_aranges 00000060  00000000  00000000  0000013a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  2 .debug_pubnames 00000027  00000000  00000000  00000142  2**0
+  2 .debug_pubnames 0000008b  00000000  00000000  0000019a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   0000005d  00000000  00000000  00000169  2**0
+  3 .debug_info   0000011e  00000000  00000000  00000225  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 00000050  00000000  00000000  000001c6  2**0
+  4 .debug_abbrev 000000be  00000000  00000000  00000343  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   00000063  00000000  00000000  00000216  2**0
+  5 .debug_line   00000169  00000000  00000000  00000401  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  00000030  00000000  00000000  0000027c  2**2
+  6 .debug_frame  00000090  00000000  00000000  0000056c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    00000071  00000000  00000000  000002ac  2**0
+  7 .debug_str    000000b7  00000000  00000000  000005fc  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -73,7 +73,7 @@ Disassembly of section .text:
   a0:	11 e0       	ldi	r17, 0x01	; 1
   a2:	a0 e0       	ldi	r26, 0x00	; 0
   a4:	b1 e0       	ldi	r27, 0x01	; 1
-  a6:	ee ec       	ldi	r30, 0xCE	; 206
+  a6:	e6 ee       	ldi	r30, 0xE6	; 230
   a8:	f0 e0       	ldi	r31, 0x00	; 0
   aa:	00 e0       	ldi	r16, 0x00	; 0
   ac:	0b bf       	out	0x3b, r16	; 59
@@ -83,31 +83,79 @@ Disassembly of section .text:
   b4:	a0 30       	cpi	r26, 0x00	; 0
   b6:	b1 07       	cpc	r27, r17
   b8:	d9 f7       	brne	.-10     	; 0xb0 <__do_copy_data+0x10>
-  ba:	0e 94 63 00 	call	0xc6	; 0xc6 <main>
-  be:	0c 94 65 00 	jmp	0xca	; 0xca <_exit>
+  ba:	0e 94 69 00 	call	0xd2	; 0xd2 <main>
+  be:	0c 94 71 00 	jmp	0xe2	; 0xe2 <_exit>
 
 000000c2 <__bad_interrupt>:
   c2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-000000c6 <main>:
-#include "PID.h"
-#include "MCU_Controller.h"
+000000c6 <run>:
 
-int main()
+
+// Called when all setup and settings has been made
+void run()
 {
-  c6:	ff cf       	rjmp	.-2      	; 0xc6 <main>
+	PID_run();
+  c6:	0e 94 6f 00 	call	0xde	; 0xde <PID_run>
+}
+  ca:	08 95       	ret
 
-000000c8 <startup>:
+000000cc <startup>:
 
-
+// Calls all startup methods that need to be run before application runs.
+// Allocate resources etc...
 void startup()
 {
-	
+	PID_startup();
+  cc:	0e 94 6e 00 	call	0xdc	; 0xdc <PID_startup>
 }
-  c8:	08 95       	ret
+  d0:	08 95       	ret
 
-000000ca <_exit>:
-  ca:	f8 94       	cli
+000000d2 <main>:
 
-000000cc <__stop_program>:
-  cc:	ff cf       	rjmp	.-2      	; 0xcc <__stop_program>
+// Calls all startup methods that need to be run before application runs.
+// Allocate resources etc...
+void startup()
+{
+	PID_startup();
+  d2:	0e 94 6e 00 	call	0xdc	; 0xdc <PID_startup>
+
+
+// Called when all setup and settings has been made
+void run()
+{
+	PID_run();
+  d6:	0e 94 6f 00 	call	0xde	; 0xde <PID_run>
+  da:	ff cf       	rjmp	.-2      	; 0xda <main+0x8>
+
+000000dc <PID_startup>:
+// allocate resources 
+void PID_startup()
+{
+	return;
+}
+  dc:	08 95       	ret
+
+000000de <PID_run>:
+
+// run controller
+void PID_run()
+{
+	return;
+}
+  de:	08 95       	ret
+
+000000e0 <resourceManager_startup>:
+
+
+void resourceManager_startup()
+{
+
+}
+  e0:	08 95       	ret
+
+000000e2 <_exit>:
+  e2:	f8 94       	cli
+
+000000e4 <__stop_program>:
+  e4:	ff cf       	rjmp	.-2      	; 0xe4 <__stop_program>

@@ -36,4 +36,5 @@ Makefile
 *.dSYM/
 
 # Other
-default/*
+default\*
+>>>>>>> e72beb97fab26025ae6a96bca38d152cbb7b6d09
