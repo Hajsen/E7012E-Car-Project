@@ -1,1 +1,0 @@
-resourceManager.o: ../resourceManager.c
