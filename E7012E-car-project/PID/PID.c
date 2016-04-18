@@ -27,7 +27,8 @@ void PID_run()
 
 int getPosition()
 {
-	// read data from 
+	// read data from sensor
+	return 1;
 }
 
 float calculateOutput(int reference, int position)
@@ -35,6 +36,7 @@ float calculateOutput(int reference, int position)
 	// declare variables
 	static float pre_error;
 	static float integral;
+	float new_integral;
 	float derivative;
 	float error;
 	float output;
@@ -51,12 +53,18 @@ float calculateOutput(int reference, int position)
 	
 	// calculate error
 	error = reference - position;
-
+	
 	// only calculate integral if error is large enough
 	if(error > EPSILON)
 	{
-		integral = integral + error * dt;
+		new_integral = integral + error * dt;
 	}
+	// Anti windup integral
+	if(new_integral < MAX && new_integral > MIN)
+	{
+		integral = new_integral;
+	}
+
 	derivative = ( error - pre_error ) / dt;
 	output = Kp*error + Ki*integral + Kd * derivative;
 
