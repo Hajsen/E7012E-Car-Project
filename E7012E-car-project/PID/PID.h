@@ -4,6 +4,7 @@
 void PID_startup();
 void PID_run();
 float calculateOutput();
+int getPosition();
 
 
 
