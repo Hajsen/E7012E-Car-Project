@@ -1,7 +1,7 @@
-#include "PID.h"
-#include "MCU_Controller.h"
+#include "PID/PID.h"
+#include "MCU_Controller/MCU_Controller.h"
 
-#include "HW_startup.h"
+#include "MCU_Controller/HW_startup.h"
 
 int main()
 {
@@ -9,7 +9,7 @@ int main()
 	startup();
 
 	// should be last thing called before main loop
-	run();
+	//run();
 	while(1);
 }
 
@@ -27,3 +27,5 @@ void run()
 {
 	PID_run();
 }
+
+void asokdokasd(){int lol;}
