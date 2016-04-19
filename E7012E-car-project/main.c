@@ -1,7 +1,29 @@
-#include "PID.h"
-#include "MCU_Controller.h"
+#include "avr/io.h"
 
-#include "HW_startup.h"
+
+#include "PID\PID.h"
+#include "MCU_Controller\MCU_Controller.h"
+
+#include "MCU_Controller\HW_startup.h"
+
+
+
+// Calls all startup methods that need to be run before application runs.
+// Allocate resources etc...
+void startup()
+{
+	HW_startup();
+	PID_startup();
+	
+}
+
+
+// Called when all setup and settings has been made
+void run()
+{
+	PID_run();
+}
+
 
 int main()
 {
@@ -13,17 +35,3 @@ int main()
 	while(1);
 }
 
-
-// Calls all startup methods that need to be run before application runs.
-// Allocate resources etc...
-void startup()
-{
-	PID_startup();
-}
-
-
-// Called when all setup and settings has been made
-void run()
-{
-	PID_run();
-}
