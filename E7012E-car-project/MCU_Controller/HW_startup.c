@@ -43,24 +43,36 @@ void initSettings(){
 // PB6/OC1B timer1/counter1 AF: (PWM)
 // WGM1 1:0 = 3, fastPWM on counter 1 (wgn = wavegenerator)
 // OCR1B output compare, match will give an interrupt or generate waveform on output
-void InitializeSteeringPWM(){
+void InitializeSteeringAndThrottlePWM(){
 	
 	//Reset port and old configuration off PORTB
 	PORTB = 0x00;
 	DDRB = 0x00;
 
-	DDRB |= 1<<DDB6;
+	//set output compare on pin 5b and 6b
+	//DDRB |= 1<<DDB6;
+	//DDRB |= 1<<DDB5;
 	// 16Mhz 
 
 	//set high on compare match
-	TCCR1A = ((1<<COM1B1)|(1<<COM1B0)|(1<<WGM11)|(0<<WGM10));
-	//fastPWM, prescaler 1024
-	TCCR1B = ((1<<WGM13) | (1<<WGM12) | (1<<CS12) | (0<<CS11) | (1<<CS10));
-	//output compare after 255ms
-	ICR1 = 1562;
-	OCR1B = 781;
+	TCCR1A = ((1<<COM1A1)|(1<<COM1A0)|(1<<COM1B1)|(1<<COM1B0)|(1<<WGM11)|(0<<WGM10));
+	//fastPWM, prescaler 64
+	TCCR1B = ((1<<WGM13) | (1<<WGM12)) | (0<<CS12) | (1<<CS11) | (1<<CS10));
+
+	/////// SET WHEELS TO BE STRAIGHT /////////
+	//enable the pin as compare output for servo
+	DDRB |= 1<<DDB5;
+
 	//reset timer
 	TCNT1 = 0;
+	//HOW LONG ITS HIGH, straight servo 1ms
+	OCR1B = 250;
+	//PERIOD, 5.5ms (250 = 1ms)
+	ICR1 = 5000;
+
+	//KAN VARA PROBLEMATISK
+	//disable pinout after correcting servos to be straight
+	DDRB &= ^(1<<DDB5);
 }
 
 // PB4/OC2A timer2/counter2 AF: (PWM) 
@@ -85,8 +97,8 @@ void HW_startup(){
 	//initGpioOutputs();
 	//initGpioInputs();
 	
-	initSettings();
-	motorPWM();
+	InitializeSteeringAndThrottlePWM();
+	//motorPWM();
 	//wheelPWM();
 
 }
