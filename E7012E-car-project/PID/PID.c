@@ -1,4 +1,4 @@
-#include <PID.h>
+#include "PID.h"
 
 #include "math.h"
 
@@ -11,25 +11,6 @@ static float const MIN = 0;
 static float const dt = 0.01;
 
 // allocate resources 
-void PID_startup()
-{
-}
-
-// run controller
-void PID_run()
-{
-	while(1)
-	{
-		// wait for mutex to be unlocked after "dt" time
-		calculateOutput(0, getPosition());
-	}
-}
-
-int getPosition()
-{
-	// read data from 
-}
-
 float calculateOutput(int reference, int position)
 {
 	// declare variables
@@ -74,3 +55,25 @@ float calculateOutput(int reference, int position)
 
 	return output;
 }
+
+void PID_startup()
+{
+}
+
+// run controller
+void PID_run()
+{
+	while(1)
+	{
+		// wait for mutex to be unlocked after "dt" time
+		calculateOutput(0, getPosition());
+	}
+}
+
+int getPosition()
+{
+	// read data from 
+	return 0;
+}
+
+

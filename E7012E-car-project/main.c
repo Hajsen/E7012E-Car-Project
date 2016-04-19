@@ -3,7 +3,6 @@
 
 #include "PID\PID.h"
 #include "MCU_Controller\MCU_Controller.h"
-
 #include "MCU_Controller\HW_startup.h"
 
 
@@ -13,8 +12,7 @@
 void startup()
 {
 	HW_startup();
-	PID_startup();
-	
+	//PID_startup();	
 }
 
 
@@ -31,7 +29,7 @@ int main()
 	startup();
 
 	// should be last thing called before main loop
-	run();
+	//run();
 	while(1);
 }
 
