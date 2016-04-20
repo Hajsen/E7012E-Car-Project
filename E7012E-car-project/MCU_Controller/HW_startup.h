@@ -1,4 +1,5 @@
-#ifndef _CONTROL_H_ #define _CONTROL_H_
+#ifndef _CONTROL_H_ 
+#define _CONTROL_H_
 
 //Defining Hardware init functions
 void HW_startup();

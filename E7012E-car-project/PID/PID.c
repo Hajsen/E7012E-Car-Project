@@ -77,12 +77,13 @@ float calculateAnglePID(int reference, int position)
 	if(error > EPSILON_ANGLE)
 	{
 		new_integral = integral + error * dt;
+		// Anti windup integral
+		if(new_integral < MAX_ANGLE && new_integral > MIN_ANGLE)
+		{
+			integral = new_integral;
+		}
 	}
-	// Anti windup integral
-	if(new_integral < MAX_ANGLE && new_integral > MIN_ANGLE)
-	{
-		integral = new_integral;
-	}
+	
 
 	derivative = ( error - pre_error ) / dt;
 	angle = Kp_ANGLE*error + Ki_ANGLE*integral + Kd_ANGLE * derivative;
@@ -135,12 +136,13 @@ float calculateSpeedPID(float angle, int position)
 	if(error > EPSILON_SPEED)
 	{
 		new_integral = integral + error * dt;
+		// Anti windup integral
+		if(new_integral < MAX_SPEED&& new_integral > MIN_SPEED)
+		{
+			integral = new_integral;
+		}
 	}
-	// Anti windup integral
-	if(new_integral < MAX_SPEED&& new_integral > MIN_SPEED)
-	{
-		integral = new_integral;
-	}
+	
 
 	derivative = ( error - pre_error ) / dt;
 	speed = Kp_SPEED*error + Ki_SPEED*integral + Kd_SPEED* derivative;

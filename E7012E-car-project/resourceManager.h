@@ -2,8 +2,8 @@
 // Defines resources that is gloabaly needed
 // Implements interface?? mabye
 
-#ifndef SENSOR_MESSAGE
-#define SENSOR_MESSAGE
+#ifndef _SENSOR_MESSAGE
+#define _SENSOR_MESSAGE
 
 #define MAX_ANGLE  45
 #define MIN_ANGLE  -45
