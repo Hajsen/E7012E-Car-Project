@@ -39,12 +39,19 @@ void PID_run()
 	}
 }
 
+// read data from SensorStatus
 int getPosition()
 {
-	// read data from sensor
+	
 	return 1;
 }
 
+
+/*
+*
+* PID for wheel angle
+*
+*/
 float calculateAnglePID(int reference, int position)
 {
 	// declare variables
@@ -98,7 +105,12 @@ float calculateAnglePID(int reference, int position)
 }
 
 
-float calculateSpeedPID(int refrence, int position)
+/*
+*
+* PID for motor speed
+*
+*/
+float calculateSpeedPID(float angle, int position)
 {
 	// declare variables
 	static float pre_error;

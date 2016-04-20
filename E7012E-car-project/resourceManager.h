@@ -5,7 +5,7 @@
 #ifndef SENSOR_MESSAGE
 #define SENSOR_MESSAGE
 
-void resourceManager_startup();
+
 
 typedef struct// SensorStatus
 { 
@@ -36,5 +36,7 @@ typedef struct// SensorStatus
 
 SensorStatus current_status;
 SensorStatus last_status;
+
+void resourceManager_startup();
 
 #endif
