@@ -38,3 +38,7 @@ Makefile
 # Other
 default\*
 default
+
+#Local settings for testing
+*.aws
+*.aps

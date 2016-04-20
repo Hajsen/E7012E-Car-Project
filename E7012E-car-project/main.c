@@ -1,24 +1,18 @@
-#include "PID.h"
-#include "MCU_Controller.h"
+#include "avr/io.h"
 
-#include "HW_startup.h"
 
-int main()
-{
-	// startup process
-	startup();
+#include "PID\PID.h"
+#include "MCU_Controller\MCU_Controller.h"
+#include "MCU_Controller\HW_startup.h"
 
-	// should be last thing called before main loop
-	run();
-	while(1);
-}
 
 
 // Calls all startup methods that need to be run before application runs.
 // Allocate resources etc...
 void startup()
 {
-	PID_startup();
+	HW_startup();
+	PID_startup();	
 }
 
 
@@ -27,3 +21,19 @@ void run()
 {
 	PID_run();
 }
+
+
+int main()
+{
+	// startup process
+	startup();
+
+	// should be last thing called before main loop
+	//run();
+	
+	steeringControl(-60);
+	throttleControl(0);
+
+	while(1);
+}
+
