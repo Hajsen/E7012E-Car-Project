@@ -12,8 +12,6 @@ static float const Kd_SPEED = 0.3;
 static int   const EPSILON_ANGLE = 1;
 static int   const EPSILON_SPEED = 1;
 
-static float const MAX_SPEED = 10;
-static float const MIN_SPEED = 0;
 static float const dt = 0.01;
 
 // allocate resources 

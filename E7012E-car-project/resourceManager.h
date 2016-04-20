@@ -7,6 +7,8 @@
 
 #define MAX_ANGLE  45
 #define MIN_ANGLE  -45
+#define MAX_SPEED 10
+#define MIN_SPEED  0
 
 typedef struct// SensorStatus
 { 

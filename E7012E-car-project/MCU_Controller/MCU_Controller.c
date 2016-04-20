@@ -1,5 +1,6 @@
 #include "avr/io.h"
 #include "MCU_Controller.h"
+#include "../resourceManager.h"
 
 // PIN 5B 
 //m/s (FIX AFTER LAB 4) 
@@ -15,8 +16,8 @@ void throttleControl(int speed){
 void steeringControl(int angle){
 	//FOR DEMONSTRATION OF LAB
 	
-	if(angle<90 && -90<angle){
-		SET_STEERING_PWM_REG = 375 + (125*angle)/90;
+	if(angle<MAX_ANGLE && MIN_ANGLE<angle){
+		SET_STEERING_PWM_REG = 375 + (125*angle)/MAX_ANGLE;
 	}
 
 	/**
