@@ -1,4 +1,4 @@
-#include <PID.h>
+#include "PID.h"
 
 #include "math.h"
 
@@ -34,8 +34,8 @@ void PID_run()
 		// wait for mutex to be unlocked after "dt" time
 		angle = calculateAnglePID(0, position);
 		speed = calculateSpeedPID(angle, position);
-		setWheelAngle(angle);
-		setMotorSpeed(speed);
+		//setWheelAngle(angle);
+		//setMotorSpeed(speed);
 	}
 }
 
@@ -131,7 +131,7 @@ float calculateSpeedPID(float angle, int position)
 	}
 	
 	// calculate error
-	error = reference - position;
+	error = angle - position;
 	
 	// only calculate integral if error is large enough
 	if(error > EPSILON_SPEED)
@@ -161,3 +161,4 @@ float calculateSpeedPID(float angle, int position)
 
 	return speed;
 }
+
