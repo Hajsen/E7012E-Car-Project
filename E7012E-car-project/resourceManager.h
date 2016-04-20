@@ -5,7 +5,8 @@
 #ifndef SENSOR_MESSAGE
 #define SENSOR_MESSAGE
 
-
+#define MAX_ANGLE  45
+#define MIN_ANGLE  -45
 
 typedef struct// SensorStatus
 { 

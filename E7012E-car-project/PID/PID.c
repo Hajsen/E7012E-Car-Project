@@ -1,6 +1,7 @@
 #include "PID.h"
-
+#include "../resourceManager.h"
 #include "math.h"
+
 
 static float const Ki_ANGLE = 0.3;
 static float const Kp_ANGLE = 0.3;
@@ -10,8 +11,7 @@ static float const Kp_SPEED = 0.3;
 static float const Kd_SPEED = 0.3;
 static int   const EPSILON_ANGLE = 1;
 static int   const EPSILON_SPEED = 1;
-static float const MAX_ANGLE = 90;
-static float const MIN_ANGLE = -90;
+
 static float const MAX_SPEED = 10;
 static float const MIN_SPEED = 0;
 static float const dt = 0.01;
