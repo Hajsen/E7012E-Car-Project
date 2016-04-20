@@ -1,4 +1,5 @@
 #include "avr/io.h"
+#include "MCU_Controller.h"
 
 // PIN 5B 
 //m/s (FIX AFTER LAB 4) 
@@ -6,7 +7,7 @@
 // 321 is .1 ms
 void throttleControl(int speed){
 	if(speed<1 && -1<speed){
-		OCR1A = 375 + (175*speed);
+		SET_THROTTLING_PWM_REG = 375 + (175*speed);
 	}
 }	
 
@@ -15,7 +16,7 @@ void steeringControl(int angle){
 	//FOR DEMONSTRATION OF LAB
 	
 	if(angle<90 && -90<angle){
-		OCR1B = 375 + (125*angle)/90;
+		SET_STEERING_PWM_REG = 375 + (125*angle)/90;
 	}
 
 	/**
