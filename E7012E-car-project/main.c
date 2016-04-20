@@ -31,8 +31,8 @@ int main()
 	// should be last thing called before main loop
 	//run();
 	
-	steeringControl(-60);
-	throttleControl(0);
+	steeringControl(45);
+	throttleControl(-0.15);
 
 	while(1);
 }

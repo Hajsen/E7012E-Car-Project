@@ -1,5 +1,5 @@
-void throttleControl(int speed);
-void steeringControl(int angle);
+void throttleControl(float speed);
+void steeringControl(float angle);
 
 //peripheral defines
 #define SET_STEERING_PWM_REG OCR1B
