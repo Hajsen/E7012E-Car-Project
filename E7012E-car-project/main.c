@@ -30,6 +30,10 @@ int main()
 
 	// should be last thing called before main loop
 	//run();
+	
+	steeringControl(-60);
+	throttleControl(0);
+
 	while(1);
 }
 
