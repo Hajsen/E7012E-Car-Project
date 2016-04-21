@@ -35,13 +35,6 @@ void initGpioInputs(){
 	
 }
 
-void initSettings(){
-	//clk prescaler, 16
-	//CLKPR = 4;
-	//enable global interrupts
-	//SREG = (1<<I);
-}
-
 void InitializeSteeringAndThrottlePWM(){
 	PORTB = 0x00;
 	DDRB = 0x00;
@@ -60,9 +53,5 @@ void InitializeSteeringAndThrottlePWM(){
 
 void HW_startup(){
 	initGpioInputs();
-	
 	InitializeSteeringAndThrottlePWM();
-	//motorPWM();
-	//wheelPWM();
-
 }
