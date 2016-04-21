@@ -2,10 +2,8 @@
 // Defines resources that is gloabaly needed
 // Implements interface?? mabye
 
-#ifndef SENSOR_MESSAGE
-#define SENSOR_MESSAGE
-
-void resourceManager_startup();
+#ifndef _SENSOR_MESSAGE
+#define _SENSOR_MESSAGE
 
 typedef struct// SensorStatus
 { 
@@ -36,5 +34,7 @@ typedef struct// SensorStatus
 
 SensorStatus current_status;
 SensorStatus last_status;
+
+void resourceManager_startup();
 
 #endif

@@ -1,5 +1,6 @@
 #include "avr/io.h"
 #include "MCU_Controller.h"
+#include "../resourceManager.h"
 
 // PIN 5B 
 //m/s (FIX AFTER LAB 4) 

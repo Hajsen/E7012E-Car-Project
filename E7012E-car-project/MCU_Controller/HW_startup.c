@@ -1,5 +1,6 @@
 #include "avr/io.h"
 #include "HW_startup.h"
+#include "general.h"
 
 void initGpioOutputs(){
 	//init ports A "outputs" Powersupply for sensors
@@ -41,39 +42,24 @@ void initSettings(){
 	//SREG = (1<<I);
 }
 
-// PB6/OC1B timer1/counter1 AF: fast PWM
-// WGM1 1:0 = 3, fastPWM on counter 1 (wgn = wavegenerator)
-// OCR1B output compare, match will give an interrupt or generate waveform on output
 void InitializeSteeringAndThrottlePWM(){
-	
-	//Reset port and old configuration off PORTB
 	PORTB = 0x00;
 	DDRB = 0x00;
 
-	//set output compare on pin 6b(channel B) 
 	DDRB |= 1<<DDB6;
-	//5b (channel A)
 	DDRB |= 1<<DDB5;
 
-	// 16Mhz 
-	//set high on compare match mode 14 (ICRn as TOP)
 	SET_COMPARE_MATCH_MODE_TIMER1A = ((1<<COM1A1)|(0<<COM1A0)|(1<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10));
-	//fastPWM, prescaler 8 => 2 000 000 hz
 	SET_COMPARE_MATCH_MODE_TIMER1B = ((1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (0<<CS10));
 
-	//reset timer
 	TCNT1 = 0;
-	//HOW LONG ITS HIGH ON CHANNEL B, straight servo 1.5ms (3000 = 1.5ms)
-	SET_STEERING_PWM_REG = 3000;
-	//HOW LONG ITS HIGH ON CHANNEL A, standing still throttle 1.5ms
-	SET_THROTTLING_PWM_REG = 3000;
-	//PERIOD (TOP), 20ms 
-	SET_TOP_TCNT1 = 40000;
+	SET_STEERING_PWM_REG = ONE_MS*1.5;
+	SET_THROTTLING_PWM_REG = ONE_MS*1.5;
+	SET_TOP_TCNT1 = ONE_MS*20;
 }
 
 void HW_startup(){
-	//initGpioOutputs();
-	//initGpioInputs();
+	initGpioInputs();
 	
 	InitializeSteeringAndThrottlePWM();
 	//motorPWM();

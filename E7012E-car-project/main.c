@@ -12,7 +12,7 @@
 void startup()
 {
 	HW_startup();
-	//PID_startup();	
+	PID_startup();	
 }
 
 
