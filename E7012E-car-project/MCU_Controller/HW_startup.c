@@ -76,11 +76,28 @@ void initializeTimerInterrupt(){
 
 }
 
+
+void initializeTimerMeasurment(){
+	//Initalize Timer 3 for measuring speed of car
+	TCNT3 = 0;
+
+	//Enable input interrupt on timer 3
+	TIMSK3 |= (1 << ICIE3);
+	//Setting clock prescaler to 8
+	TCCR3B |= ((0 << CS32) | (1 << CS31) | (0 << CS30));	
+	//Setting so input event triggers when it get a high edge, also enabled Input Noise canceler
+	TCCR3B |= ((1 << ICNC3)|(1 << ICES3));
+
+	
+
+}
+
+
 void HW_startup(){
 	initGpioOutputs();
 	initGpioInputs();
 	
 	InitializeSteeringAndThrottlePWM();
 	initializeTimerInterrupt();	
-	
+	initializeTimerMeasurment();
 }
