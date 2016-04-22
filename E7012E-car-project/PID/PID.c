@@ -1,5 +1,6 @@
 #include "PID.h"
 #include "../resourceManager.h"
+#include "../MCU_Controller/general.h"
 #include "math.h"
 
 
@@ -137,7 +138,7 @@ float calculateSpeedPID(float angle, int position)
 	{
 		new_integral = integral + error * dt;
 		// Anti windup integral
-		if(new_integral < MAX_SPEED&& new_integral > MIN_SPEED)
+		if(new_integral < MAX_SPEED && new_integral > MIN_SPEED)
 		{
 			integral = new_integral;
 		}

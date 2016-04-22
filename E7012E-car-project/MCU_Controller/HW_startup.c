@@ -2,6 +2,8 @@
 #include "HW_startup.h"
 #include "general.h"
 
+#include "avr/interrupt.h"
+
 void initGpioOutputs(){
 	//init ports A "outputs" Powersupply for sensors
 	PORTA = 0b00000000; //Reset all the pins to the "OFF" position
@@ -15,8 +17,8 @@ void initGpioOutputs(){
 	DDRA ^= 1 << DDA6;
 	DDRA ^= 1 << DDA7;
 
-	PORTA ^= 1 << PORTA0; //Set pin PA0 to ON
-	PORTA ^= 1 << PORTA1; //Set pin PA1 to ON
+	PORTA |= 1 << PORTA0; //Set pin PA0 to ON
+	PORTA |= 1 << PORTA1; //Set pin PA1 to ON
 	
 
 }
@@ -24,14 +26,14 @@ void initGpioOutputs(){
 void initGpioInputs(){
 	PORTC = 0b00000000; //Reset all the pins to "OFF" position
 	
-	DDRC = 0 << DDC0; //Setting pins for the "INPUT" configuration
-	DDRC = 0 << DDC1;
-	DDRC = 0 << DDC2;
-	DDRC = 0 << DDC3;
-	DDRC = 0 << DDC4;
-	DDRC = 0 << DDC5;
-	DDRC = 0 << DDC6;
-	DDRC = 0 << DDC7;
+	DDRC |= 0 << DDC0; //Setting pins for the "INPUT" configuration
+	DDRC |= 0 << DDC1;
+	DDRC |= 0 << DDC2;
+	DDRC |= 0 << DDC3;
+	DDRC |= 0 << DDC4;
+	DDRC |= 0 << DDC5;
+	DDRC |= 0 << DDC6;
+	DDRC |= 0 << DDC7;
 	
 }
 
@@ -49,8 +51,8 @@ void InitializeSteeringAndThrottlePWM(){
 	DDRB |= 1<<DDB6;
 	DDRB |= 1<<DDB5;
 
-	SET_COMPARE_MATCH_MODE_TIMER1A = ((1<<COM1A1)|(0<<COM1A0)|(1<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10));
-	SET_COMPARE_MATCH_MODE_TIMER1B = ((1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (0<<CS10));
+	SET_COMPARE_MATCH_MODE_TIMER1A |= ((1<<COM1A1)|(0<<COM1A0)|(1<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10));
+	SET_COMPARE_MATCH_MODE_TIMER1B |= ((1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (0<<CS10));
 
 	TCNT1 = 0;
 	SET_STEERING_PWM_REG = ONE_MS*1.5;
@@ -58,11 +60,27 @@ void InitializeSteeringAndThrottlePWM(){
 	SET_TOP_TCNT1 = ONE_MS*20;
 }
 
+void initializeTimerInterrupt(){
+
+	
+	SET_COMPARE_MATCH_MODE_TIMER1A |= ((1<<COM1C1)|(0<<COM1C0));
+
+	//Setting time when the interrupt shall occur
+	SET_TIMER_INTERRUPT_REG = ONE_MS*1.5;
+
+	//Enabling Timer 1 C compare interrupt
+	TIMER1_INTERRUPT_REG |= (1 << OCIE1C);
+	
+	//Setting global interrupt bit so interrupts work
+	sei();
+
+}
+
 void HW_startup(){
+	initGpioOutputs();
 	initGpioInputs();
 	
 	InitializeSteeringAndThrottlePWM();
-	//motorPWM();
-	//wheelPWM();
-
+	initializeTimerInterrupt();	
+	
 }
