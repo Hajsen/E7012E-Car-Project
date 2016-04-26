@@ -5,10 +5,13 @@
 #ifndef _SENSOR_MESSAGE
 #define _SENSOR_MESSAGE
 
+#define MAX_INT 0xFFFF
+#define RADIUS 23
+#define DISTANCE (2*M_PI*RADIUS)/6
+
 typedef struct// SensorStatus
 { 
     int outer_left : 1;
-	int outer_right : 1;
 	
 	int sensor_left1 : 1;
 	int sensor_left2 : 1;
@@ -30,10 +33,17 @@ typedef struct// SensorStatus
 	int sensor_right4 : 1;
 	int sensor_right5 : 1;
 	int sensor_right6 : 1;
+
+	int outer_right : 1;
+
 } SensorStatus;
 
-SensorStatus current_status;
-SensorStatus last_status;
+extern SensorStatus current_sensorStatus;
+extern SensorStatus previous_sensorStatus;
+
+extern float velocity;
+extern float newSpeed;
+extern float newAngle;
 
 void resourceManager_startup();
 

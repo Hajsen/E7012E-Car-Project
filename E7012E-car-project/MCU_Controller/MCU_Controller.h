@@ -4,4 +4,6 @@
 void throttleControl(float speed);
 void steeringControl(float angle);
 
+void updateCarStatus(void);
+
 #endif

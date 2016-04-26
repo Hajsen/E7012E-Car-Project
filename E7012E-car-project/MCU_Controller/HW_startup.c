@@ -26,23 +26,21 @@ void initGpioOutputs(){
 void initGpioInputs(){
 	PORTC = 0b00000000; //Reset all the pins to "OFF" position
 	
-	DDRC &= ~(0 << DDC0); //Setting pins for the "INPUT" configuration
-	DDRC &= ~(0 << DDC1);
-	DDRC &= ~(0 << DDC2);
-	DDRC &= ~(0 << DDC3);
-	DDRC &= ~(0 << DDC4);
-	DDRC &= ~(0 << DDC5);
-	DDRC &= ~(0 << DDC6);
-	DDRC &= ~(0 << DDC7);
-	
+	DDRC &= ~(1 << DDC0); //Setting pins for the "INPUT" configuration
+	DDRC &= ~(1 << DDC1);
+	DDRC &= ~(1 << DDC2);
+	DDRC &= ~(1 << DDC3);
+	DDRC &= ~(1 << DDC4);
+	DDRC &= ~(1 << DDC5);
+	DDRC &= ~(1 << DDC6);
+	DDRC &= ~(1 << DDC7);
+
+	DDRD &= ~(1 << DDD4);
+	DDRD &= ~(1 << DDD5);
+	DDRD &= ~(1 << DDD6);
+	DDRD &= ~(1 << DDD7);
 }
 
-void initSettings(){
-	//clk prescaler, 16
-	//CLKPR = 4;
-	//enable global interrupts
-	//SREG = (1<<I);
-}
 
 void InitializeSteeringAndThrottlePWM(){
 	PORTB = 0x00;
@@ -90,8 +88,8 @@ void initializeTimerMeasurment(){
 	TIMSK3 |= (1 << TOIE3);
 	//Setting clock prescaler to 8
 	TCCR3B |= ((0 << CS32) | (1 << CS31) | (0 << CS30));	
-	//Setting so input event triggers when it get a high edge, also enabled Input Noise canceler
-	TCCR3B |= ((1 << ICNC3)|(1 << ICES3));
+	//Setting so input event triggers when it get a falling edge, also enabled Input Noise canceler
+	TCCR3B |= ((1 << ICNC3)|(0 << ICES3));
 
 
 	TCNT3 = 0;
