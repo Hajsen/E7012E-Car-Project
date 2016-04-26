@@ -5,32 +5,34 @@
 #include "PID\PID.h"
 #include "MCU_Controller\MCU_Controller.h"
 #include "MCU_Controller\HW_startup.h"
+#include "PIDhelper.h"
 
 
-int input_capture_time_high = 0;
-int input_capture_time_low = 0;
+void toggleMCUled(){
+	DDRE |= (1 << DDE4);
+	
+	PORTE ^= (1 << PORTA4);
+}
 
 //Interrupt function (Here is where the interrupt does work)
+
 ISR(TIMER1_COMPC_vect){
-
 	
-	PORTA ^= 1 << PORTA7; //Toggles led
-
-	reti(); //Enables global interrupts again
+	PORTA |= 1 << PORTA7; //Toggles led
 
 }
+
 
 ISR(TIMER3_CAPT_vect){
-
-	input_capture_time_high = ICR3H;
-	input_capture_time_low = ICR3L;
 		
-	PORTA = 1 << PORTA6;
-
-	reti();
-
+	toggleMCUled();
 }
 
+
+ISR(TIMER3_OVF_vect){
+
+
+}
 
 
 // Calls all startup methods that need to be run before application runs.
@@ -49,16 +51,15 @@ void run()
 }
 
 
-int main()
-{
+int main(){
 	// startup process
 	startup();
 
 	// should be last thing called before main loop
 	//run();
 	
-	steeringControl(45);
-	throttleControl(0.30);
+	//steeringControl(45);
+	//throttleControl(-0.25);
 
 	while(1);
 }
