@@ -5,6 +5,8 @@
 #include "MCU_Controller\MCU_Controller.h"
 #include "MCU_Controller\HW_startup.h"
 
+#include "PIDHelper.h"
+
 
 
 // Calls all startup methods that need to be run before application runs.

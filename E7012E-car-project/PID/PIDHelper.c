@@ -1,41 +1,42 @@
 #include <math.h>
+#include "PIDHelper.h"
+#include "resourcemanager.h"
 
-//INTERRUPT on pulse
-//MUST NOT FORGET TO INIT TIME_PREVIOUS TO A DEFAULT VALUE
-//interrupt from on input
+int overflow_counter = 0;
+int time_before_overflow = 0;
+int time_previous = 0;
+int time_recent = 0;
+int delta_time = 0;
+int velocity = 0;
+
 void ISR(TIMER3_CAPT_vect){
-	int delta_time = 0;
-	TIME_RECENT = ICR3;
-
-	//(mm)
-	//distance between magnets
+	time_recent = ICR3;
 
 	//If overflow has happened
-	if(OVERFLOW_COUNTER > 0){
+	if(overflow_counter > 0){
 		//reset timer overflow
-		delta_time = TIME_RECENT + (OVERFLOW_COUNTER-1)*MAX_INT + TIME_BEFORE_OVERFLOW;
-		OVERFLOW_COUNTER = 0;
+		delta_time = time_recent + (overflow_counter-1)*MAX_INT + time_before_overflow;
+		overflow_counter = 0;
 	}
 	else{
-		delta_time = TIME_RECENT - TIME_PREVIOUS;
+		delta_time = time_recent - time_previous;
 	}
 
-	//ms
-	int time = delta_time/1000;
 	//cm/ms
-	VELOCITY = distance/time;	
+	velocity = (distance/delta_time)/1000;	
+	ICR2 = velocity;
 
 }
 
 //interrupt on overflow
 isr(TIMER3_OVF_vect){
-	if(OVERFLOW_COUNTER == 0){
-		TIME_BEFORE_OVERFLOW = MAX_INT - TIME_PREVIOUS;	
+	if(overflow_counter == 0){
+		time_before_overflow = MAX_INT - time_previous;	
 	}
 
-	OVERFLOW_COUNTER++;
+	overflow_counter++;
 }
 
-void carVelocity(){
+void setCarVelocity(){
 	
 }
