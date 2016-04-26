@@ -3,35 +3,21 @@
 #include "general.h"
 #include "../resourceManager.h"
 
-// PIN 5B 
-//m/s (FIX AFTER LAB 4) 
-// 3 modes, -1 0 and 1. 
-// 321 is .1 ms
+// m/s (FIX AFTER LAB 4) 
 void throttleControl(float speed){
-	if(speed<1.0f && -1.0f<speed){
-		SET_THROTTLING_PWM_REG = 3000 + (1400*speed);
+	if(speed < MAX_SPEED && speed > MIN_SPEED){
+		SET_THROTTLING_PWM_REG = 1.5*ONE_MS + (0.7*ONE_MS*speed);
 	}
 }	
 
-//PIN 6B
 void steeringControl(float angle){
-	//FOR DEMONSTRATION OF LAB
-	if(angle>45.0f)
-	{
-		return steeringControl(45.0f);
+	if(angle <= MAX_ANGLE && MIN_ANGLE <= angle){
+		SET_STEERING_PWM_REG = 1.5*ONE_MS + (0.5*ONE_MS*angle)/MAX_ANGLE;
 	}
-	else if(angle<-45.0f)
-	{
-		return steeringControl(-45.0f);
+	else if(angle > MAX_ANGLE){
+		return steeringControl(MAX_ANGLE);
 	}
-	else if(angle<=45.0f && -45.0f<=angle){
-		SET_STEERING_PWM_REG = 3000 + (1000*angle)/45.0f;
+	else if(angle<MIN_ANGLE){
+		return steeringControl(MIN_ANGLE);
 	}
-
-	/**
-	if(!(angle>90 & -90<angle)){
-		//HOW LONG ITS HIGH, straight servo 1ms
-		OCR1B = 375;
-	}
-	**/
 }
