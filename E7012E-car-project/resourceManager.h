@@ -35,6 +35,8 @@ typedef struct// SensorStatus
 SensorStatus current_status;
 SensorStatus last_status;
 
+extern float velocity;
+
 void resourceManager_startup();
 
 #endif
