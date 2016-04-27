@@ -21,21 +21,14 @@ void PID_startup()
 }
 
 // run controller
-void PID_run()
+void PID_run(float reference )
 {
-	float angle;
-	float speed;
-	int position;
+	
 
-	while(1)
-	{
-		position = getPosition();
-		// wait for mutex to be unlocked after "dt" time
-		angle = calculateAnglePID(0, position);
-		speed = calculateSpeedPID(angle, position);
-		//setWheelAngle(angle);
-		//setMotorSpeed(speed);
-	}
+		//position = getPosition();
+		//newAngle = calculateAnglePID(0, position);
+		newSpeed = calculateSpeedPID(velocity, reference);
+		
 }
 
 // read data from SensorStatus
@@ -51,7 +44,7 @@ int getPosition()
 * PID for wheel angle
 *
 */
-float calculateAnglePID(int reference, int position)
+float calculateAnglePID(float reference, float position)
 {
 	// declare variables
 	static float pre_error;

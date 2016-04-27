@@ -25,7 +25,7 @@ ISR(TIMER1_COMPC_vect){
 	PORTD |= (1 << PORTD0);
 
 	readSteeringSensors();
-
+	//PID_run(REFERENCE_SPEED);
 	updateCarStatus();
 
 }
@@ -74,7 +74,7 @@ void startup()
 // Called when all setup and settings has been made
 void run()
 {
-	PID_run();
+	//PID_run();
 }
 
 
@@ -87,8 +87,8 @@ int main(){
 	// should be last thing called before main loop
 	//run();
 	
-	//steeringControl(45);
-	throttleControl(-0.25);
+	steeringControl(45);
+	throttleControl(0.25f);
 
 	while(1);
 }

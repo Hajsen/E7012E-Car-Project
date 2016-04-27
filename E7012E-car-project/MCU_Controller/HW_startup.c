@@ -65,7 +65,7 @@ void initializeTimerInterrupt(){
 	SET_COMPARE_MATCH_MODE_TIMER1A |= ((1<<COM1C1)|(0<<COM1C0));
 
 	//Setting time when the interrupt shall occur 5ms after the counter has restarted.
-	SET_TIMER_INTERRUPT_REG = ONE_MS*5;
+	SET_TIMER_INTERRUPT_REG = ONE_MS*19;
 
 	//Enabling Timer 1 C compare interrupt
 	TIMER1_INTERRUPT_REG |= (1 << OCIE1C);
