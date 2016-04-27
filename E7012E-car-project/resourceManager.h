@@ -10,6 +10,7 @@
 #define MAX_SPEED 10
 #define MIN_SPEED  0
 
+
 typedef struct// SensorStatus
 { 
     int outer_left : 1;
@@ -37,8 +38,8 @@ typedef struct// SensorStatus
 	int sensor_right6 : 1;
 } SensorStatus;
 
-SensorStatus current_status;
-SensorStatus last_status;
+extern SensorStatus current_status;
+extern SensorStatus last_status;
 
 void resourceManager_startup();
 
