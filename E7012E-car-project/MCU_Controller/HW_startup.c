@@ -5,40 +5,40 @@
 #include "avr/interrupt.h"
 
 void initGpioOutputs(){
-	//init ports A "outputs" Powersupply for sensors
-	PORTA = 0b00000000; //Reset all the pins to the "OFF" position
-	
-	DDRA |= 1 << DDA0; //Setting pins to the correct configurations
-	DDRA |= 1 << DDA1;
-	DDRA |= 1 << DDA2;
-	DDRA |= 1 << DDA3;
-	DDRA |= 1 << DDA4;
-	DDRA |= 1 << DDA5;
-	DDRA |= 1 << DDA6;
-	DDRA |= 1 << DDA7;
+	//USED for TESTING AND ERROR FIXING
 
-	PORTA |= 1 << PORTA0; //Set pin PA0 to ON
-	PORTA |= 1 << PORTA1; //Set pin PA1 to ON
+	//init ports D "outputs" Powersupply for sensors
+	PORTB = 0b00000000; //Reset all the pins to the "OFF" position
 	
+	DDRD |= 1 << DDD0; //Setting pins to the output configurations
+	DDRD |= 1 << DDD1;
+	DDRD |= 1 << DDD2;
+	DDRD |= 1 << DDD3;
+	DDRD |= 1 << DDD4;
+	DDRD |= 1 << DDD5;
+	DDRD |= 1 << DDD6;
+	DDRD |= 1 << DDD7;
 
 }
 
 void initGpioInputs(){
 	PORTC = 0b00000000; //Reset all the pins to "OFF" position
-	
+	PORTA = 0b00000000;	
+
 	DDRC &= ~(1 << DDC0); //Setting pins for the "INPUT" configuration
 	DDRC &= ~(1 << DDC1);
 	DDRC &= ~(1 << DDC2);
 	DDRC &= ~(1 << DDC3);
 	DDRC &= ~(1 << DDC4);
-	DDRC &= ~(1 << DDC5);
+	
 	DDRC &= ~(1 << DDC6);
 	DDRC &= ~(1 << DDC7);
 
-	DDRD &= ~(1 << DDD4);
-	DDRD &= ~(1 << DDD5);
-	DDRD &= ~(1 << DDD6);
-	DDRD &= ~(1 << DDD7);
+	DDRA &= ~(1 << DDA0);
+	DDRA &= ~(1 << DDA1);
+	DDRA &= ~(1 << DDA2);
+	DDRA &= ~(1 << DDA3);
+	DDRA &= ~(1 << DDA4);
 }
 
 
@@ -64,8 +64,8 @@ void initializeTimerInterrupt(){
 	
 	SET_COMPARE_MATCH_MODE_TIMER1A |= ((1<<COM1C1)|(0<<COM1C0));
 
-	//Setting time when the interrupt shall occur
-	SET_TIMER_INTERRUPT_REG = ONE_MS*19;
+	//Setting time when the interrupt shall occur 5ms after the counter has restarted.
+	SET_TIMER_INTERRUPT_REG = ONE_MS*5;
 
 	//Enabling Timer 1 C compare interrupt
 	TIMER1_INTERRUPT_REG |= (1 << OCIE1C);

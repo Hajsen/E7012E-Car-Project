@@ -15,23 +15,26 @@ int time_previous = 0;
 int time_current = 0;
 int delta_time = 0;
 
-void toggleMCUled(){
-	DDRE |= (1 << DDE4);
-	
-	PORTE ^= (1 << PORTA4);
-}
+
 
 //Interrupt function (Here is where the interrupt does work)
 
 ISR(TIMER1_COMPC_vect){
+	//read sensors
+
+	PORTD |= (1 << PORTD0);
+
+	readSteeringSensors();
+
 	updateCarStatus();
-	//PORTA |= 1 << PORTA7; //Toggles led
 
 }
 
 
 ISR(TIMER3_CAPT_vect){
 	time_current = ICR3;
+
+	toggleMCUled();
 
 	//If overflow has happened
 	if(overflow_counter > 0){
@@ -43,7 +46,7 @@ ISR(TIMER3_CAPT_vect){
 		delta_time = time_current - time_previous;
 	}
 
-	//cm/ms
+	//m/s
 	velocity = (DISTANCE/delta_time)/1000;	
 }
 
@@ -77,13 +80,15 @@ void run()
 
 int main(){
 	// startup process
+	
 	startup();
+
 
 	// should be last thing called before main loop
 	//run();
 	
 	//steeringControl(45);
-	//throttleControl(-0.25);
+	throttleControl(-0.25);
 
 	while(1);
 }
