@@ -1,9 +1,21 @@
 #include "avr/io.h"
+#include <avr/interrupt.h>
 
 
 #include "PID\PID.h"
 #include "MCU_Controller\MCU_Controller.h"
 #include "MCU_Controller\HW_startup.h"
+
+
+//Interrupt function (Here is where the interrupt does work)
+ISR(TIMER1_COMPC_vect){
+
+	
+	PORTA ^= 1 << PORTA7; //Toggles led
+
+	reti(); //Enables global interrupts again
+
+}
 
 
 
@@ -31,8 +43,8 @@ int main()
 	// should be last thing called before main loop
 	//run();
 	
-	steeringControl(-60);
-	throttleControl(0);
+	steeringControl(45);
+	throttleControl(-0.15);
 
 	while(1);
 }

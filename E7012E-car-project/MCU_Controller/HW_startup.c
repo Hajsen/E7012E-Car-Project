@@ -1,5 +1,8 @@
 #include "avr/io.h"
 #include "HW_startup.h"
+#include "general.h"
+
+#include "avr/interrupt.h"
 
 void initGpioOutputs(){
 	//init ports A "outputs" Powersupply for sensors
@@ -14,8 +17,8 @@ void initGpioOutputs(){
 	DDRA ^= 1 << DDA6;
 	DDRA ^= 1 << DDA7;
 
-	PORTA ^= 1 << PORTA0; //Set pin PA0 to ON
-	PORTA ^= 1 << PORTA1; //Set pin PA1 to ON
+	PORTA |= 1 << PORTA0; //Set pin PA0 to ON
+	PORTA |= 1 << PORTA1; //Set pin PA1 to ON
 	
 
 }
@@ -23,14 +26,14 @@ void initGpioOutputs(){
 void initGpioInputs(){
 	PORTC = 0b00000000; //Reset all the pins to "OFF" position
 	
-	DDRC = 0 << DDC0; //Setting pins for the "INPUT" configuration
-	DDRC = 0 << DDC1;
-	DDRC = 0 << DDC2;
-	DDRC = 0 << DDC3;
-	DDRC = 0 << DDC4;
-	DDRC = 0 << DDC5;
-	DDRC = 0 << DDC6;
-	DDRC = 0 << DDC7;
+	DDRC |= 0 << DDC0; //Setting pins for the "INPUT" configuration
+	DDRC |= 0 << DDC1;
+	DDRC |= 0 << DDC2;
+	DDRC |= 0 << DDC3;
+	DDRC |= 0 << DDC4;
+	DDRC |= 0 << DDC5;
+	DDRC |= 0 << DDC6;
+	DDRC |= 0 << DDC7;
 	
 }
 
@@ -41,42 +44,43 @@ void initSettings(){
 	//SREG = (1<<I);
 }
 
-// PB6/OC1B timer1/counter1 AF: fast PWM
-// WGM1 1:0 = 3, fastPWM on counter 1 (wgn = wavegenerator)
-// OCR1B output compare, match will give an interrupt or generate waveform on output
 void InitializeSteeringAndThrottlePWM(){
-	
-	//Reset port and old configuration off PORTB
 	PORTB = 0x00;
 	DDRB = 0x00;
 
-	//set output compare on pin 6b(channel B) 
 	DDRB |= 1<<DDB6;
-	//5b (channel A)
 	DDRB |= 1<<DDB5;
 
-	// 16Mhz 
-	//set high on compare match mode 14 (ICRn as TOP)
-	SET_COMPARE_MATCH_MODE_TIMER1A = ((1<<COM1A1)|(0<<COM1A0)|(1<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10));
-	//fastPWM, prescaler 64 => 250 000 hz
-	SET_COMPARE_MATCH_MODE_TIMER1B = ((1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10));
+	SET_COMPARE_MATCH_MODE_TIMER1A |= ((1<<COM1A1)|(0<<COM1A0)|(1<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10));
+	SET_COMPARE_MATCH_MODE_TIMER1B |= ((1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (0<<CS10));
 
-	//reset timer
 	TCNT1 = 0;
-	//HOW LONG ITS HIGH ON CHANNEL B, straight servo 1.5ms (375 = 1.5ms)
-	SET_STEERING_PWM_REG = 375;
-	//HOW LONG ITS HIGH ON CHANNEL A, standing still throttle 1.5ms
-	SET_THROTTLING_PWM_REG = 375;
-	//PERIOD (TOP), 20ms 
-	SET_TOP_TCNT1 = 5000;
+	SET_STEERING_PWM_REG = ONE_MS*1.5;
+	SET_THROTTLING_PWM_REG = ONE_MS*1.5;
+	SET_TOP_TCNT1 = ONE_MS*20;
+}
+
+void initializeTimerInterrupt(){
+
+	
+	SET_COMPARE_MATCH_MODE_TIMER1A |= ((1<<COM1C1)|(0<<COM1C0));
+
+	//Setting time when the interrupt shall occur
+	SET_TIMER_INTERRUPT_REG = ONE_MS*1.5;
+
+	//Enabling Timer 1 C compare interrupt
+	TIMER1_INTERRUPT_REG |= (1 << OCIE1C);
+	
+	//Setting global interrupt bit so interrupts work
+	sei();
+
 }
 
 void HW_startup(){
-	//initGpioOutputs();
-	//initGpioInputs();
+	initGpioOutputs();
+	initGpioInputs();
 	
 	InitializeSteeringAndThrottlePWM();
-	//motorPWM();
-	//wheelPWM();
-
+	initializeTimerInterrupt();	
+	
 }
