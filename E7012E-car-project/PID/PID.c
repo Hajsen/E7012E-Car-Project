@@ -6,14 +6,14 @@
 
 static float const Ki_ANGLE = 0.3;
 static float const Kp_ANGLE = 0.3;
-static float const Kd_ANGLE = 0.3;
+static float const Kd_ANGLE = 0.0;
 static float const Ki_SPEED = 0.3;
 static float const Kp_SPEED = 0.3;
-static float const Kd_SPEED = 0.3;
+static float const Kd_SPEED = 0.0;
 static int   const EPSILON_ANGLE = 1;
 static int   const EPSILON_SPEED = 1;
 
-static float const dt = 0.01;
+static float const dt = 0.02;
 
 // allocate resources 
 void PID_startup()
@@ -110,28 +110,27 @@ float calculateAnglePID(int reference, int position)
 * PID for motor speed
 *
 */
-float calculateSpeedPID(float angle, int position)
+float calculateSpeedPID(float velocity, float reference)
 {
 	// declare variables
-	static float pre_error;
-	static float integral;
+	static float pre_error=0;
+	static float integral=0;
 	float new_integral;
 	float derivative;
 	float error;
 	float speed;
-	
+	// calculate error
+	error = velocity-reference;
+
 	// if not is number set to 0
-	if(!isnan(pre_error))
+	/*if(!isnan(pre_error))
 	{
 		pre_error = 0;
 	}
 	if(!isnan(integral))
 	{
 		integral = 0;
-	}
-	
-	// calculate error
-	error = angle - position;
+	}*/
 	
 	// only calculate integral if error is large enough
 	if(error > EPSILON_SPEED)
