@@ -1,5 +1,5 @@
 #include "PID.h"
-#include "../resourceManager.h"
+#include "..\resourceManager.h"
 #include "../MCU_Controller/general.h"
 #include "math.h"
 
@@ -7,7 +7,7 @@
 static float const Ki_ANGLE = 0.3;
 static float const Kp_ANGLE = 0.3;
 static float const Kd_ANGLE = 0.0;
-static float const Ki_SPEED = 0.3;
+static float const Ki_SPEED = 100;
 static float const Kp_SPEED = 0.3;
 static float const Kd_SPEED = 0.0;
 static int   const EPSILON_ANGLE = 1;
@@ -114,7 +114,10 @@ float calculateSpeedPID(float velocity, float reference)
 	float speed;
 	// calculate error
 	error = velocity-reference;
+	error = error>0.0f?error:-error;
 
+	if(velocity > 0 ) return 0.33f;
+	else return 0;
 	// if not is number set to 0
 	/*if(!isnan(pre_error))
 	{
@@ -126,20 +129,21 @@ float calculateSpeedPID(float velocity, float reference)
 	}*/
 	
 	// only calculate integral if error is large enough
-	if(error > EPSILON_SPEED)
-	{
+	//if(error)// > EPSILON_SPEED)
+	//{
 		new_integral = integral + error * dt;
 		// Anti windup integral
-		if(new_integral < MAX_SPEED && new_integral > MIN_SPEED)
-		{
-			integral = new_integral;
-		}
-	}
+		
+	//}
 	
 
 	derivative = ( error - pre_error ) / dt;
-	speed = Kp_SPEED*error + Ki_SPEED*integral + Kd_SPEED* derivative;
+	speed = Kp_SPEED*error + Ki_SPEED*new_integral + Kd_SPEED* derivative;
 
+	if(speed < MAX_SPEED || speed > MIN_SPEED)
+	{
+		integral = new_integral;
+	}
 	// Keep output within allowed range
 	if(speed > MAX_SPEED)
 	{

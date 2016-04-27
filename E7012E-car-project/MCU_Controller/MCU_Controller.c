@@ -1,7 +1,7 @@
 #include "avr/io.h"
 #include "MCU_Controller.h"
 #include "general.h"
-#include "../resourceManager.h"
+#include "..\resourceManager.h"
 
 // PIN 5B 
 //m/s (FIX AFTER LAB 4) 
@@ -14,8 +14,7 @@
 //-----------TESTING-------------------------
 void toggleMCUled(){
 	DDRE |= (1 << DDE4);
-	
-	PORTE |= (1 << PORTE4);
+	PORTE ^= (1 << PORTE4);
 }
 //----------------------------------
 void throttleControl(float speed){
@@ -48,7 +47,6 @@ void readSteeringSensors(){
 	//0b01000000
 	//1<<PINC7
 	if((PINC & PINC7)){
-		toggleMCUled();
 	}
 	if((PINC & PINC6)){
 		
@@ -58,6 +56,6 @@ void readSteeringSensors(){
 }
 
 void updateCarStatus(){
-	steeringControl(newAngle);
+	//steeringControl(newAngle);
 	throttleControl(newSpeed);
 }

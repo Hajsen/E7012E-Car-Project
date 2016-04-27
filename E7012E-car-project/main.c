@@ -6,7 +6,7 @@
 #include "PID\PID.h"
 #include "MCU_Controller\MCU_Controller.h"
 #include "MCU_Controller\HW_startup.h"
-#include "..\resourcemanager.h"
+#include "..\resourceManager.h"
 
 
 int overflow_counter = 0;
@@ -22,12 +22,11 @@ int delta_time = 0;
 ISR(TIMER1_COMPC_vect){
 	//read sensors
 
-	PORTD |= (1 << PORTD0);
+	if(velocity > 0)	PORTD ^= (1 << PORTD0);
 
 	readSteeringSensors();
-	//PID_run(REFERENCE_SPEED);
+	PID_run(REFERENCE_SPEED);
 	updateCarStatus();
-
 }
 
 
@@ -41,13 +40,15 @@ ISR(TIMER3_CAPT_vect){
 		//reset timer overflow
 		delta_time = time_current + (overflow_counter-1)*MAX_INT + time_before_overflow;
 		overflow_counter = 0;
+		
 	}
 	else{
 		delta_time = time_current - time_previous;
 	}
 
-	//m/s
-	velocity = (DISTANCE/delta_time)/1000;	
+	velocity = (DISTANCE/delta_time)/1000.0f;
+	
+	//m/s	
 }
 
 
@@ -67,7 +68,8 @@ ISR(TIMER3_OVF_vect){
 void startup()
 {
 	HW_startup();
-	PID_startup();	
+	PID_startup();
+	resourceManager_startup();
 }
 
 
@@ -76,7 +78,6 @@ void run()
 {
 	//PID_run();
 }
-
 
 int main(){
 	// startup process
@@ -88,7 +89,7 @@ int main(){
 	//run();
 	
 	steeringControl(45);
-	throttleControl(0.25f);
+	throttleControl(0.0f);
 
 	while(1);
 }

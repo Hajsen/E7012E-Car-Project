@@ -89,8 +89,9 @@ void initializeTimerMeasurment(){
 	//Setting clock prescaler to 8
 	TCCR3B |= ((0 << CS32) | (1 << CS31) | (0 << CS30));	
 	//Setting so input event triggers when it get a falling edge, also enabled Input Noise canceler
-	TCCR3B |= ((1 << ICNC3)|(0 << ICES3));
-
+	TCCR3B |= (1 << ICNC3);
+	TCCR3B |= (1 << ICES3);
+	
 
 	TCNT3 = 0;
 	sei();

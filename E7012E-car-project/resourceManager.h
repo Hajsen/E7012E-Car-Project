@@ -5,7 +5,7 @@
 #ifndef _SENSOR_MESSAGE
 #define _SENSOR_MESSAGE
 
-#define REFERENCE_SPEED 2.0f
+#define REFERENCE_SPEED 10.0f
 #define MAX_INT 0xFFFF
 #define RADIUS 23
 #define DISTANCE (2*M_PI*RADIUS)/6
