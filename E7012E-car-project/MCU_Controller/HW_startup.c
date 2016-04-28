@@ -8,7 +8,7 @@ void initGpioOutputs(){
 	//USED for TESTING AND ERROR FIXING
 
 	//init ports D "outputs" Powersupply for sensors
-	PORTB = 0b00000000; //Reset all the pins to the "OFF" position
+	PORTD = 0b00000000; //Reset all the pins to the "OFF" position
 	
 	DDRD |= 1 << DDD0; //Setting pins to the output configurations
 	DDRD |= 1 << DDD1;

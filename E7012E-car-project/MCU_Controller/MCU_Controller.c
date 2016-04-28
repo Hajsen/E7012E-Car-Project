@@ -18,7 +18,7 @@ void toggleMCUled(){
 }
 //----------------------------------
 void throttleControl(float speed){
-	if(speed<1.0f && -1.0f<speed){
+	if(speed<=1.0f && -1.0f<=speed){
 		SET_THROTTLING_PWM_REG = 3000 + (1400*speed);
 	}
 }	

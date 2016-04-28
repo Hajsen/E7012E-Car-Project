@@ -1,6 +1,7 @@
 #include "PID.h"
 #include "..\resourceManager.h"
 #include "../MCU_Controller/general.h"
+#include "../MCU_Controller/MCU_Controller.h"
 #include "math.h"
 
 
@@ -28,6 +29,7 @@ void PID_run(float reference )
 		//position = getPosition();
 		//newAngle = calculateAnglePID(0, position);
 		newSpeed = calculateSpeedPID(velocity, reference);
+		
 		
 }
 
@@ -116,8 +118,7 @@ float calculateSpeedPID(float velocity, float reference)
 	error = velocity-reference;
 	error = error>0.0f?error:-error;
 
-	if(velocity > 0 ) return 0.33f;
-	else return 0;
+
 	// if not is number set to 0
 	/*if(!isnan(pre_error))
 	{

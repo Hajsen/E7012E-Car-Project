@@ -23,10 +23,11 @@ ISR(TIMER1_COMPC_vect){
 	//read sensors
 
 	if(velocity > 0)	PORTD ^= (1 << PORTD0);
-
+	
 	readSteeringSensors();
 	PID_run(REFERENCE_SPEED);
 	updateCarStatus();
+	
 }
 
 
