@@ -8,7 +8,7 @@
 static float const Ki_ANGLE = 0.3;
 static float const Kp_ANGLE = 0.3;
 static float const Kd_ANGLE = 0.0;
-static float const Ki_SPEED = 0.3;
+static float const Ki_SPEED = 1.0;
 static float const Kp_SPEED = 0.3;
 static float const Kd_SPEED = 0.0;
 static int   const EPSILON_ANGLE = 1;
@@ -117,6 +117,8 @@ float calculateSpeedPID(float velocity, float reference)
 	// calculate error
 	error = velocity-reference;
 	error = error>0.0f?error:-error;
+
+
 
 
 	// if not is number set to 0

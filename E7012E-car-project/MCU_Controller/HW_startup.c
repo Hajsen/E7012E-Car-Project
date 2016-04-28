@@ -78,19 +78,18 @@ void initializeTimerInterrupt(){
 void initializeTimerMeasurment(){
 	//Initalize Timer 3 for measuring speed of car
 	
+	//DDRE |= (1 << DDE7);
+	DDRE  &= ~(1 << DDE7);
+	PORTE |= (1 << PORTE7);
 
-	
-	DDRE &= ~(1 << DDE7);
-	//PORTE |= (1 << PORTE7);
-
-	//Enable input interrupt and overflow on timer 3
+	//Enable INPUT interrupt on timer 3
 	TIMSK3 |= (1 << ICIE3);
-
+	//Enable Overflow interrupt on timer 3
 	TIMSK3 |= (1 << TOIE3);
 	//Setting clock prescaler to 8
 	TCCR3B |= ((0 << CS32) | (1 << CS31) | (0 << CS30));	
 	//Setting so input event triggers when it get a falling edge, also enabled Input Noise canceler
-	TCCR3B |= (1 << ICNC3);
+	TCCR3B &= ~(1 << ICNC3);
 	TCCR3B |= (1 << ICES3);
 	
 

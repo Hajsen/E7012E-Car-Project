@@ -9,11 +9,11 @@
 #include "..\resourceManager.h"
 
 
-int overflow_counter = 0;
-int time_before_overflow = 0;
-int time_previous = 0;
-int time_current = 0;
-int delta_time = 0;
+double overflow_counter = 0;
+double time_before_overflow = 0;
+double time_previous = 0;
+double time_current = 0;
+double delta_time = 0;
 
 
 
@@ -22,7 +22,7 @@ int delta_time = 0;
 ISR(TIMER1_COMPC_vect){
 	//read sensors
 
-	if(velocity > 0)	PORTD ^= (1 << PORTD0);
+	if(velocity == 0)	PORTD ^= (1 << PORTD0);
 	
 	readSteeringSensors();
 	PID_run(REFERENCE_SPEED);
@@ -36,6 +36,9 @@ ISR(TIMER3_CAPT_vect){
 
 	toggleMCUled();
 
+	PORTD |= (1 << PD0);
+
+	volatile double banana = MAX_INT*2;
 	//If overflow has happened
 	if(overflow_counter > 0){
 		//reset timer overflow
@@ -47,9 +50,12 @@ ISR(TIMER3_CAPT_vect){
 		delta_time = time_current - time_previous;
 	}
 
-	velocity = (DISTANCE/delta_time)/1000.0f;
 	
-	//m/s	
+	//m/s
+	velocity = (DISTANCE/delta_time)/1000.0f;
+
+	time_previous = time_current;
+	
 }
 
 
@@ -100,8 +106,8 @@ int main(){
 	// should be last thing called before main loop
 	//run();
 	
-	steeringControl(45);
-	throttleControl(0.0f);
+	steeringControl(45); 	//pb5
+	throttleControl(0.2f); 	//pb6
 
 	while(1);
 }
