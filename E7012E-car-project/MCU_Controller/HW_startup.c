@@ -81,6 +81,7 @@ void initializeTimerMeasurment(){
 
 	
 	DDRE &= ~(1 << DDE7);
+	//PORTE |= (1 << PORTE7);
 
 	//Enable input interrupt and overflow on timer 3
 	TIMSK3 |= (1 << ICIE3);

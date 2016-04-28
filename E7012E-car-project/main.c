@@ -82,7 +82,18 @@ void run()
 
 int main(){
 	// startup process
-	
+	PORTB = 0b00000000;
+	volatile int i,j;
+	// Wait for Motor controller to ...
+	for(i = 0; i<1000;++i)
+	{
+		for(j = 0; j<1000;++j)
+		{
+			j--;
+			j++;
+			//Do nothing
+		}
+	}
 	startup();
 
 

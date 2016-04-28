@@ -8,7 +8,7 @@
 static float const Ki_ANGLE = 0.3;
 static float const Kp_ANGLE = 0.3;
 static float const Kd_ANGLE = 0.0;
-static float const Ki_SPEED = 100;
+static float const Ki_SPEED = 0.3;
 static float const Kp_SPEED = 0.3;
 static float const Kd_SPEED = 0.0;
 static int   const EPSILON_ANGLE = 1;
