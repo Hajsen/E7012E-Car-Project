@@ -43,8 +43,8 @@ void readSteeringSensors(){
 	//PINC 0-4 == Höger
 	//PINA 0-4 == Vänster
 	//PINC 6-7 == Mitten
-	SensorStatus current_sensorStatus;
-	
+	previous_sensorStatus = current_sensorStatus;
+
 	current_sensorStatus.sensor_left1 = PINA0;
 	current_sensorStatus.sensor_left2 = PINA1;
 	current_sensorStatus.sensor_left3 = PINA2;
