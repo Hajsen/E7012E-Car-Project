@@ -45,20 +45,25 @@ void readSteeringSensors(){
 	//PINC 6-7 == Mitten
 	previous_sensorStatus = current_sensorStatus;
 
-	current_sensorStatus.sensor_left1 = PINA0;
-	current_sensorStatus.sensor_left2 = PINA1;
-	current_sensorStatus.sensor_left3 = PINA2;
-	current_sensorStatus.sensor_left4 = PINA3;
-	current_sensorStatus.sensor_left5 = PINA4;
+	volatile int lol = (1 & (PINA >> PINA0));
+	current_sensorStatus.sensor_left1 = (1 & (PINA >> PINA0));
+	current_sensorStatus.sensor_left2 = (1 & (PINA >> PINA1));
+	current_sensorStatus.sensor_left3 = (1 & (PINA >> PINA2));
+	current_sensorStatus.sensor_left4 = (1 & (PINA >> PINA3));
+	current_sensorStatus.sensor_left5 = (1 & (PINA >> PINA4));
 
-	current_sensorStatus.sensor_middle1 = PINC6;
-	current_sensorStatus.sensor_middle2 = PINC7;
+	if(current_sensorStatus.sensor_left1 == 1){
+		velocity = 1;
+	}
+
+	current_sensorStatus.sensor_middle1 = (1 & (PINC >> PINC6));
+	current_sensorStatus.sensor_middle2 = (1 & (PINC >> PINC7));
 	
-	current_sensorStatus.sensor_right1 = PINC0;
-	current_sensorStatus.sensor_right2 = PINC1;
-	current_sensorStatus.sensor_right3 = PINC2;
-	current_sensorStatus.sensor_right4 = PINC3;
-	current_sensorStatus.sensor_right5 = PINC4;
+	current_sensorStatus.sensor_right1 = (1 & (PINC >> PINC0));
+	current_sensorStatus.sensor_right2 = (1 & (PINC >> PINC1));
+	current_sensorStatus.sensor_right3 = (1 & (PINC >> PINC2));
+	current_sensorStatus.sensor_right4 = (1 & (PINC >> PINC3));
+	current_sensorStatus.sensor_right5 = (1 & (PINC >> PINC4));
 	
 }
 
