@@ -39,6 +39,10 @@ void initGpioInputs(){
 	DDRA &= ~(1 << DDA2);
 	DDRA &= ~(1 << DDA3);
 	DDRA &= ~(1 << DDA4);
+
+	//Setting pull-up resistor to all INPUT ports that will be used.
+	PORTA |= 0b00011111; //Setting PORTS PA0-PA4 to 1 
+	PORTC |= 0b11011111; //Setting PORTA PC0-PC4 and PC6,PC7 to 1
 }
 
 

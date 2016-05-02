@@ -38,7 +38,6 @@ ISR(TIMER3_CAPT_vect){
 
 	PORTD |= (1 << PD0);
 
-	volatile double banana = MAX_INT*2;
 	//If overflow has happened
 	if(overflow_counter > 0){
 		//reset timer overflow

@@ -43,15 +43,22 @@ void readSteeringSensors(){
 	//PINC 0-4 == Höger
 	//PINA 0-4 == Vänster
 	//PINC 6-7 == Mitten
+	SensorStatus current_sensorStatus;
 	
-	//0b01000000
-	//1<<PINC7
-	if((PINC & PINC7)){
-	}
-	if((PINC & PINC6)){
-		
-	}
+	current_sensorStatus.sensor_left1 = PINA0;
+	current_sensorStatus.sensor_left2 = PINA1;
+	current_sensorStatus.sensor_left3 = PINA2;
+	current_sensorStatus.sensor_left4 = PINA3;
+	current_sensorStatus.sensor_left5 = PINA4;
 
+	current_sensorStatus.sensor_middle1 = PINC6;
+	current_sensorStatus.sensor_middle2 = PINC7;
+	
+	current_sensorStatus.sensor_right1 = PINC0;
+	current_sensorStatus.sensor_right2 = PINC1;
+	current_sensorStatus.sensor_right3 = PINC2;
+	current_sensorStatus.sensor_right4 = PINC3;
+	current_sensorStatus.sensor_right5 = PINC4;
 	
 }
 
