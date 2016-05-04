@@ -43,31 +43,61 @@ void readSteeringSensors(){
 	//PINC 0-4 == Höger
 	//PINA 0-4 == Vänster
 	//PINC 6-7 == Mitten
-	previous_sensorStatus = current_sensorStatus;
-
-	volatile int lol = (1 & (PINA >> PINA0));
-	current_sensorStatus.sensor_left1 = (1 & (PINA >> PINA0));
-	current_sensorStatus.sensor_left2 = (1 & (PINA >> PINA1));
-	current_sensorStatus.sensor_left3 = (1 & (PINA >> PINA2));
-	current_sensorStatus.sensor_left4 = (1 & (PINA >> PINA3));
-	current_sensorStatus.sensor_left5 = (1 & (PINA >> PINA4));
-
-	if(current_sensorStatus.sensor_left1 == 1){
-		velocity = 1;
+	int sensor_forward = ((PINC)>>PINC6) & 0b11;
+	
+	if(sensor_forward!=0)
+	{
+		//If forward sensor is on, calculate positive negative or zero value
+		sensorStatus.forward_line_value = (1 & (PINC >> PINC6) -(1 & (PINC >> PINC7)));
+	}
+	else
+	{
+		//If no forward sensor is on, make sure the value has the same sign as the last value.
+		if(sensorStatus.forward_line_value<0)
+		{
+			sensorStatus.forward_line_value = -2.0f;
+		}
+		if(sensorStatus.forward_line_value>0)
+		{
+			sensorStatus.forward_line_value = 2.0f;
+		}
+		//If it was zero, it will stay at zero.
 	}
 
-	current_sensorStatus.sensor_middle1 = (1 & (PINC >> PINC6));
-	current_sensorStatus.sensor_middle2 = (1 & (PINC >> PINC7));
+	//sensorStatus.2 = ();
+	int sensors_on = 0;
+	int sensor_left = (PINA) & 0b11111;	
+	int sensor_right = (PINC) & 0b11111;
+	int i = 0;
+	float total_value = 0;
+	for(i = 1; sensor_right>0; ++i)
+	{
+		if(sensor_right&1)
+		{
+			++sensors_on;
+		}
+		total_value += (sensor_right&1)*i;
+		sensor_left>>=1;
+	}
+	for(i = 1; sensor_left>0; ++i)
+	{
+		if(sensor_left&1)
+		{
+			++sensors_on;
+		}
+		total_value -=(sensor_left&1)*i;
+		sensor_left>>=1;
+	}
+	float average_value = total_value/sensors_on;
 	
-	current_sensorStatus.sensor_right1 = (1 & (PINC >> PINC0));
-	current_sensorStatus.sensor_right2 = (1 & (PINC >> PINC1));
-	current_sensorStatus.sensor_right3 = (1 & (PINC >> PINC2));
-	current_sensorStatus.sensor_right4 = (1 & (PINC >> PINC3));
-	current_sensorStatus.sensor_right5 = (1 & (PINC >> PINC4));
-	
+	//Use old value if sensor data is poor
+	if(sensors_on>1)
+	{
+		sensorStatus.line_value = average_value;
+	}
 }
 
 void updateCarStatus(){
-	//steeringControl(newAngle);
+	steeringControl(newAngle);
 	throttleControl(newSpeed);
 }

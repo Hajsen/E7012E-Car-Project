@@ -5,14 +5,20 @@
 #include "math.h"
 
 
-static float const Ki_ANGLE = 0.3;
-static float const Kp_ANGLE = 0.3;
+#define REFERENCE_ANGLE_CORRECTION  2.0f
+#define REFERENCE_SPEED_CORRECTION  0.5f
+#define REFERENCE_SPEED_CORRECTION_FORWARD  2.0f
+#define REFERENCE_VELOCITY 5.0f
+
+static float const Ki_ANGLE = 1;
+static float const Kp_ANGLE = 5;
 static float const Kd_ANGLE = 0.0;
 static float const Ki_SPEED = 1.0;
 static float const Kp_SPEED = 0.3;
 static float const Kd_SPEED = 0.0;
 static int   const EPSILON_ANGLE = 1;
 static int   const EPSILON_SPEED = 1;
+
 
 static float const dt = 0.02;
 
@@ -22,22 +28,15 @@ void PID_startup()
 }
 
 // run controller
-void PID_run(float reference )
+void PID_run()
 {
-	
-
-		//position = getPosition();
-		//newAngle = calculateAnglePID(0, position);
-		newSpeed = calculateSpeedPID(velocity, reference);
-		
-		
-}
-
-// read data from SensorStatus
-int getPosition()
-{
-	
-	return 1;
+		float angle_reference=sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
+		float angle_measurement = sensorStatus.line_value;
+		float velocity_reference = REFERENCE_VELOCITY
+			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)
+			- REFERENCE_SPEED_CORRECTION*abs(sensorStatus.line_value);
+		newAngle = calculateAnglePID(angle_reference, angle_measurement);
+		newSpeed = calculateSpeedPID(velocity_reference, velocity);		
 }
 
 
@@ -49,40 +48,27 @@ int getPosition()
 float calculateAnglePID(float reference, float position)
 {
 	// declare variables
-	static float pre_error;
-	static float integral;
+	static float pre_error=0;
+	static float integral=0;
 	float new_integral;
 	float derivative;
 	float error;
 	float angle;
 	
-	// if not is number set to 0
-	if(!isnan(pre_error))
-	{
-		pre_error = 0;
-	}
-	if(!isnan(integral))
-	{
-		integral = 0;
-	}
-	
 	// calculate error
 	error = reference - position;
-	
-	// only calculate integral if error is large enough
-	if(error > EPSILON_ANGLE)
-	{
-		new_integral = integral + error * dt;
-		// Anti windup integral
-		if(new_integral < MAX_ANGLE && new_integral > MIN_ANGLE)
-		{
-			integral = new_integral;
-		}
-	}
 	
 
 	derivative = ( error - pre_error ) / dt;
 	angle = Kp_ANGLE*error + Ki_ANGLE*integral + Kd_ANGLE * derivative;
+
+
+	// Anti windup integral
+	if((angle < MAX_ANGLE && integral<new_integral)
+		|| (angle > MIN_ANGLE && integral>new_integral))
+	{
+		integral = new_integral;
+	}
 
 	// Keep output within allowed range
 	if(angle > MAX_ANGLE)
@@ -105,7 +91,7 @@ float calculateAnglePID(float reference, float position)
 * PID for motor speed
 *
 */
-float calculateSpeedPID(float velocity, float reference)
+float calculateSpeedPID(float reference, float velocity)
 {
 	// declare variables
 	static float pre_error=0;
@@ -121,15 +107,7 @@ float calculateSpeedPID(float velocity, float reference)
 
 
 
-	// if not is number set to 0
-	/*if(!isnan(pre_error))
-	{
-		pre_error = 0;
-	}
-	if(!isnan(integral))
-	{
-		integral = 0;
-	}*/
+
 	
 	// only calculate integral if error is large enough
 	//if(error)// > EPSILON_SPEED)
@@ -143,7 +121,8 @@ float calculateSpeedPID(float velocity, float reference)
 	derivative = ( error - pre_error ) / dt;
 	speed = Kp_SPEED*error + Ki_SPEED*new_integral + Kd_SPEED* derivative;
 
-	if(speed < MAX_SPEED || speed > MIN_SPEED)
+	if((speed < MAX_SPEED && integral<new_integral)
+		|| (speed > MIN_SPEED && integral>new_integral))
 	{
 		integral = new_integral;
 	}

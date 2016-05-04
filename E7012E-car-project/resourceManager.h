@@ -5,32 +5,25 @@
 #ifndef _SENSOR_MESSAGE
 #define _SENSOR_MESSAGE
 
-#define REFERENCE_SPEED 0.01f
+#define abs(x) ((x)<0 ? -(x) : (x))
+
 #define MAX_INT 65535
 #define RADIUS 23
 #define DISTANCE (2*M_PI*RADIUS)/6
 
+
+#define MAX_ANGLE 45.0f
+#define MIN_ANGLE -45.0f
+#define MAX_SPEED 1.0f
+#define MIN_SPEED -1.0f
+
 typedef struct// SensorStatus
 { 
-	int sensor_left1; //: 0;
-	int sensor_left2; //: 0;
-	int sensor_left3; //: 0;
-	int sensor_left4; //: 0;
-	int sensor_left5; //: 0;
-
-	int sensor_middle1; // : 0;
-	int sensor_middle2;  //: 0;
-
-	int sensor_right1; //: 1;
-	int sensor_right2; //: 1;
-	int sensor_right3; //: 1;
-	int sensor_right4; //: 1;
-	int sensor_right5; //: 1;
-
+	int line_value;
+	int forward_line_value;
 } SensorStatus;
 
-extern SensorStatus current_sensorStatus;
-extern SensorStatus previous_sensorStatus;
+extern SensorStatus sensorStatus;
 
 extern float velocity;
 extern float newSpeed;

@@ -1,11 +1,6 @@
 #ifndef _GENERAL_H_ 
 #define _GENERAL_H_
 
-#define MAX_ANGLE 45.0f
-#define MIN_ANGLE -45.0f
-#define MAX_SPEED 1.0f
-#define MIN_SPEED -1.0f
-
 #define CLOCK_FREQUENCY 16000000
 #define PRESCALER 8
 #define ONE_MS (CLOCK_FREQUENCY/PRESCALER)/1000

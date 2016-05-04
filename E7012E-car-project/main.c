@@ -25,7 +25,7 @@ ISR(TIMER1_COMPC_vect){
 	if(velocity == 0)	PORTD ^= (1 << PORTD0);
 	
 	readSteeringSensors();
-	PID_run(REFERENCE_SPEED);
+	PID_run();
 	updateCarStatus();
 	
 }
@@ -105,7 +105,7 @@ int main(){
 	// should be last thing called before main loop
 	//run();
 	
-	steeringControl(45); 	//pb5
+	steeringControl(-45); 	//pb5
 	throttleControl(0.2f); 	//pb6
 
 	while(1);
