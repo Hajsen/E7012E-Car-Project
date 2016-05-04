@@ -30,7 +30,7 @@ void PID_startup()
 // run controller
 void PID_run()
 {
-		float angle_reference=sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
+		float angle_reference = sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
 		float angle_measurement = sensorStatus.line_value;
 		float velocity_reference = REFERENCE_VELOCITY
 			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)

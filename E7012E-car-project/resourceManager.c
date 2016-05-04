@@ -13,5 +13,6 @@ void resourceManager_startup()
 	velocity = 0;
 
 	sensorStatus.line_value=0;
+	sensorStatus.forward_line_value=0;
 
 }

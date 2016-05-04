@@ -43,6 +43,8 @@ void readSteeringSensors(){
 	//PINC 0-4 == Höger
 	//PINA 0-4 == Vänster
 	//PINC 6-7 == Mitten
+
+	// Read pin 6/7 on Port C
 	int sensor_forward = ((PINC)>>PINC6) & 0b11;
 	
 	if(sensor_forward!=0)
@@ -66,8 +68,10 @@ void readSteeringSensors(){
 
 	//sensorStatus.2 = ();
 	int sensors_on = 0;
-	int sensor_left = (PINA) & 0b11111;	
-	int sensor_right = (PINC) & 0b11111;
+
+	// Read first 5 pins on port A and C
+	int sensor_left  = 	(PINA) & 0b11111;	
+	int sensor_right = 	(PINC) & 0b11111;
 	int i = 0;
 	float total_value = 0;
 	for(i = 1; sensor_right>0; ++i)
