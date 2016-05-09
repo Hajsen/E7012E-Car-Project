@@ -31,7 +31,6 @@ ISR(TIMER1_COMPC_vect){
 ISR(TIMER3_CAPT_vect){
 	time_current = ICR3;
 
-	toggleMCUled();
 
 	
 
@@ -48,8 +47,9 @@ ISR(TIMER3_CAPT_vect){
 
 	
 	//m/s
-	velocity = (DISTANCE/delta_time)/1000.0f;
-
+	velocity = (DISTANCE/delta_time)*2000.0f;///1000.0f;	
+	DEBUG_SET((int)((velocity)));
+	DEBUG(1);
 	time_previous = time_current;
 	
 }
@@ -74,6 +74,7 @@ void startup()
 	PID_startup();
 	resourceManager_startup();
 }
+
 
 
 

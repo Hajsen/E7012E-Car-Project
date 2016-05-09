@@ -18,8 +18,16 @@ void toggleMCUled(){
 }
 //----------------------------------
 void throttleControl(float speed){
+	if(speed>1.0f)
+	{
+		speed=1.0f;
+	}
+	if(speed<-1.0f)
+	{
+		speed=-1.0f;
+	}
 	if(speed<=1.0f && -1.0f<=speed){
-		SET_THROTTLING_PWM_REG = 3000 + (1400*speed);
+		SET_THROTTLING_PWM_REG = 3000 - (1400*speed);
 	}
 }	
 
@@ -100,11 +108,10 @@ void readSteeringSensors(){
 	{
 		sensorStatus.line_value = average_value;
 	}
-	int pos = 3+sensorStatus.forward_line_value; //abs(sensorStatus.line_value);
-	DEBUG_SET(pos);
 }
 
 void updateCarStatus(){
 	steeringControl(newAngle);
 	throttleControl(newSpeed);
+
 }

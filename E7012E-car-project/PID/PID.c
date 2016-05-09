@@ -6,15 +6,16 @@
 
 
 #define REFERENCE_ANGLE_CORRECTION  2.0f
-#define REFERENCE_SPEED_CORRECTION  0.5f
-#define REFERENCE_SPEED_CORRECTION_FORWARD  2.0f
+#define REFERENCE_SPEED_CORRECTION 0.5f
+#define REFERENCE_SPEED_CORRECTION_FORWARD  1.0f
 #define REFERENCE_VELOCITY 5.0f
+#define REFERENCE_FACTOR 0.25f
 
 static float const Ki_ANGLE = 0.3f;
 static float const Kp_ANGLE = 5.0f;
 static float const Kd_ANGLE = 0.0f;
-static float const Ki_SPEED = 1.0f;
-static float const Kp_SPEED = 0.3f;
+static float const Ki_SPEED = 0.01f;
+static float const Kp_SPEED = 0.2f;
 static float const Kd_SPEED = 0.0f;
 
 
@@ -30,9 +31,9 @@ void PID_run()
 {
 		float angle_reference = -sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
 		float angle_measurement = sensorStatus.line_value;
-		float velocity_reference = REFERENCE_VELOCITY
+		float velocity_reference = REFERENCE_FACTOR * ( REFERENCE_VELOCITY
 			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)
-			- REFERENCE_SPEED_CORRECTION*abs(sensorStatus.line_value);
+			- REFERENCE_SPEED_CORRECTION*abs(sensorStatus.line_value));
 		newAngle = calculateAnglePID(angle_reference, angle_measurement);
 		newSpeed = calculateSpeedPID(velocity_reference, velocity);		
 }
@@ -103,8 +104,8 @@ float calculateSpeedPID(float reference, float velocity)
 	float error;
 	float speed;
 	// calculate error
-	error = velocity-reference;
-	error = error>0.0f?error:-error;
+	error = reference-velocity;
+	//error = error>0.0f?error:-error;
 
 
 
@@ -117,8 +118,8 @@ float calculateSpeedPID(float reference, float velocity)
 	derivative = ( error - pre_error ) / dt;
 	speed = Kp_SPEED*error + Ki_SPEED*new_integral + Kd_SPEED* derivative;
 
-	if((speed < MAX_SPEED && integral<new_integral)
-		|| (speed > MIN_SPEED && integral>new_integral))
+	if((speed < MAX_SPEED && new_integral>integral)
+		|| (speed > MIN_SPEED && new_integral<integral))
 	{
 		integral = new_integral;
 	}
