@@ -10,14 +10,12 @@
 #define REFERENCE_SPEED_CORRECTION_FORWARD  2.0f
 #define REFERENCE_VELOCITY 5.0f
 
-static float const Ki_ANGLE = 1;
-static float const Kp_ANGLE = 5;
-static float const Kd_ANGLE = 0.0;
-static float const Ki_SPEED = 1.0;
-static float const Kp_SPEED = 0.3;
-static float const Kd_SPEED = 0.0;
-static int   const EPSILON_ANGLE = 1;
-static int   const EPSILON_SPEED = 1;
+static float const Ki_ANGLE = 0.3f;
+static float const Kp_ANGLE = 5.0f;
+static float const Kd_ANGLE = 0.0f;
+static float const Ki_SPEED = 1.0f;
+static float const Kp_SPEED = 0.3f;
+static float const Kd_SPEED = 0.0f;
 
 
 static float const dt = 0.02;
@@ -30,7 +28,7 @@ void PID_startup()
 // run controller
 void PID_run()
 {
-		float angle_reference = sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
+		float angle_reference = -sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
 		float angle_measurement = sensorStatus.line_value;
 		float velocity_reference = REFERENCE_VELOCITY
 			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)
@@ -46,7 +44,10 @@ void PID_run()
 *
 */
 float calculateAnglePID(float reference, float position)
-{
+{	
+	/*int pos = abs(position);
+	DEBUG_SET(pos);*/
+
 	// declare variables
 	static float pre_error=0;
 	static float integral=0;
@@ -93,6 +94,7 @@ float calculateAnglePID(float reference, float position)
 */
 float calculateSpeedPID(float reference, float velocity)
 {
+
 	// declare variables
 	static float pre_error=0;
 	static float integral=0;
@@ -108,14 +110,8 @@ float calculateSpeedPID(float reference, float velocity)
 
 
 
-	
-	// only calculate integral if error is large enough
-	//if(error)// > EPSILON_SPEED)
-	//{
-		new_integral = integral + error * dt;
-		// Anti windup integral
-		
-	//}
+	new_integral = integral + error * dt;
+
 	
 
 	derivative = ( error - pre_error ) / dt;

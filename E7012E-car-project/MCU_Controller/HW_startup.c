@@ -1,7 +1,7 @@
 #include "avr/io.h"
 #include "HW_startup.h"
 #include "general.h"
-
+#include "../resourceManager.h"
 #include "avr/interrupt.h"
 
 void initGpioOutputs(){
@@ -9,7 +9,7 @@ void initGpioOutputs(){
 
 	//init ports D "outputs" Powersupply for sensors
 	PORTD = 0b00000000; //Reset all the pins to the "OFF" position
-	
+
 	DDRD |= 1 << DDD0; //Setting pins to the output configurations
 	DDRD |= 1 << DDD1;
 	DDRD |= 1 << DDD2;
@@ -18,7 +18,6 @@ void initGpioOutputs(){
 	DDRD |= 1 << DDD5;
 	DDRD |= 1 << DDD6;
 	DDRD |= 1 << DDD7;
-
 }
 
 void initGpioInputs(){

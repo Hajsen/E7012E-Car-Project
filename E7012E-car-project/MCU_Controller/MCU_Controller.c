@@ -50,7 +50,8 @@ void readSteeringSensors(){
 	if(sensor_forward!=0)
 	{
 		//If forward sensor is on, calculate positive negative or zero value
-		sensorStatus.forward_line_value = (1 & (PINC >> PINC6) -(1 & (PINC >> PINC7)));
+		sensorStatus.forward_line_value =
+			((1 & (sensor_forward)) -(1 & (sensor_forward>>1)));
 	}
 	else
 	{
@@ -75,13 +76,13 @@ void readSteeringSensors(){
 	int i = 0;
 	float total_value = 0;
 	for(i = 1; sensor_right>0; ++i)
-	{
+	{		
 		if(sensor_right&1)
 		{
 			++sensors_on;
 		}
-		total_value += (sensor_right&1)*i;
-		sensor_left>>=1;
+		total_value += (sensor_right&1)*(5-i);
+		sensor_right>>=1;
 	}
 	for(i = 1; sensor_left>0; ++i)
 	{
@@ -89,7 +90,7 @@ void readSteeringSensors(){
 		{
 			++sensors_on;
 		}
-		total_value -=(sensor_left&1)*i;
+		total_value -=(sensor_left&1)*(5-i);
 		sensor_left>>=1;
 	}
 	float average_value = total_value/sensors_on;
@@ -99,6 +100,8 @@ void readSteeringSensors(){
 	{
 		sensorStatus.line_value = average_value;
 	}
+	int pos = 3+sensorStatus.forward_line_value; //abs(sensorStatus.line_value);
+	DEBUG_SET(pos);
 }
 
 void updateCarStatus(){

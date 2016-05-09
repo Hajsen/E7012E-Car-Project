@@ -4,6 +4,19 @@
 
 #ifndef _SENSOR_MESSAGE
 #define _SENSOR_MESSAGE
+#include "avr/io.h"
+
+#define DEBUG_SET(x) PORTD = 1<<(((15-(2*x))%8)-(x>3?1:0))
+#define DEBUG_ON(x) PORTD |= 1<<(((15-(2*x))%8)-(x>3?1:0))
+#define DEBUG_OFF(x) PORTD &= !(1<<(((15-(2*x))%8)-(x>3?1:0)))
+#define DEBUG(x) PORTD ^= 1<<(((15-(2*x))%8)-(x>3?1:0))
+/*#ifdef _DEBUG_x_USED\
+#error debug(x) used twice\
+#else\
+#define _DEBUG_x_USED\
+PORTD ^= 1<<x;\
+#endif*/
+
 
 #define abs(x) ((x)<0 ? -(x) : (x))
 

@@ -21,9 +21,6 @@ double delta_time = 0;
 
 ISR(TIMER1_COMPC_vect){
 	//read sensors
-
-	if(velocity == 0)	PORTD ^= (1 << PORTD0);
-	
 	readSteeringSensors();
 	PID_run();
 	updateCarStatus();
@@ -36,7 +33,7 @@ ISR(TIMER3_CAPT_vect){
 
 	toggleMCUled();
 
-	PORTD |= (1 << PD0);
+	
 
 	//If overflow has happened
 	if(overflow_counter > 0){
@@ -79,14 +76,10 @@ void startup()
 }
 
 
-// Called when all setup and settings has been made
-void run()
-{
-	//PID_run();
-}
 
 int main(){
 	// startup process
+	
 	PORTB = 0b00000000;
 	volatile int i,j;
 	// Wait for Motor controller to ...
