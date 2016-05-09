@@ -18,15 +18,15 @@ void toggleMCUled(){
 }
 //----------------------------------
 void throttleControl(float speed){
-	if(speed>1.0f)
+	if(speed>MAX_SPEED)
 	{
-		speed=1.0f;
+		speed=MAX_SPEED;
 	}
-	if(speed<-1.0f)
+	if(speed<MIN_SPEED)
 	{
-		speed=-1.0f;
+		speed=MIN_SPEED;
 	}
-	if(speed<=1.0f && -1.0f<=speed){
+	if(speed<=MAX_SPEED && MIN_SPEED<=speed){
 		SET_THROTTLING_PWM_REG = 3000 - (1400*speed);
 	}
 }	
