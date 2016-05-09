@@ -5,16 +5,16 @@
 #include "math.h"
 
 
-#define REFERENCE_ANGLE_CORRECTION  2.0f
-#define REFERENCE_SPEED_CORRECTION 0.5f
-#define REFERENCE_SPEED_CORRECTION_FORWARD  1.0f
+#define REFERENCE_ANGLE_CORRECTION  1.6f
+#define REFERENCE_SPEED_CORRECTION 0.25f
+#define REFERENCE_SPEED_CORRECTION_FORWARD  0.9f
 #define REFERENCE_VELOCITY 5.0f
-#define REFERENCE_FACTOR 0.25f
+#define REFERENCE_FACTOR 0.15f
 
-static float const Ki_ANGLE = 0.3f;
-static float const Kp_ANGLE = 5.0f;
+static float const Ki_ANGLE = 2.0f;
+static float const Kp_ANGLE = 6.0f;
 static float const Kd_ANGLE = 0.0f;
-static float const Ki_SPEED = 0.01f;
+static float const Ki_SPEED = 0.1f;
 static float const Kp_SPEED = 0.2f;
 static float const Kd_SPEED = 0.0f;
 

@@ -27,8 +27,8 @@ PORTD ^= 1<<x;\
 
 #define MAX_ANGLE 45.0f
 #define MIN_ANGLE -45.0f
-#define MAX_SPEED 0.4f
-#define MIN_SPEED -0.4f
+#define MAX_SPEED 1.0f
+#define MIN_SPEED -1.0f
 
 typedef struct// SensorStatus
 { 
