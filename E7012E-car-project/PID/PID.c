@@ -11,9 +11,9 @@
 #define REFERENCE_VELOCITY 5.0f
 #define REFERENCE_FACTOR 0.275f
 #define MIN_DX 0.001
-static float const Ki_ANGLE = 0.5f;
+static float const Ki_ANGLE = 0.35f;
 static float const Kp_ANGLE = 6.4f;
-static float const Kd_ANGLE = 0.0f;
+static float const Kd_ANGLE = 0.1f;
 static float const Ki_SPEED = 0.1f;
 static float const Kp_SPEED = 0.3f;
 static float const Kd_SPEED = 0.0f;
