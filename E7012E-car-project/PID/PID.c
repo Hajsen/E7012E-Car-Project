@@ -45,9 +45,7 @@ void PID_run()
 *
 */
 float calculateAnglePID(float reference, float position)
-{	
-	/*int pos = abs(position);
-	DEBUG_SET(pos);*/
+{
 
 	// declare variables
 	static float pre_error=0;
@@ -59,7 +57,6 @@ float calculateAnglePID(float reference, float position)
 	
 	// calculate error
 	error = reference - position;
-	
 
 	derivative = ( error - pre_error ) / dt;
 	angle = Kp_ANGLE*error + Ki_ANGLE*integral + Kd_ANGLE * derivative;

@@ -108,6 +108,8 @@ void readSteeringSensors(){
 	{
 		sensorStatus.line_value = average_value;
 	}
+	
+	DEBUG_SET((int)(4.0f+sensorStatus.line_value));
 }
 
 void updateCarStatus(){

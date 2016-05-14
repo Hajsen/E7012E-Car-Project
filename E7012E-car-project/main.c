@@ -47,9 +47,7 @@ ISR(TIMER3_CAPT_vect){
 
 	
 	//m/s
-	velocity = (DISTANCE/delta_time)*2000.0f;///1000.0f;	
-	DEBUG_SET((int)((velocity)));
-	DEBUG(1);
+	velocity = (DISTANCE/delta_time)*2000.0f;
 	time_previous = time_current;
 	
 }
