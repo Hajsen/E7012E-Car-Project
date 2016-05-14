@@ -19,6 +19,7 @@ PORTD ^= 1<<x;\
 
 
 #define abs(x) ((x)<0 ? -(x) : (x))
+#define max(a,b) ((a<b)? b : a)
 
 #define MAX_INT 65535
 #define RADIUS 23

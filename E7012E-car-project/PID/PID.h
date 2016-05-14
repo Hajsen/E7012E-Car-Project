@@ -3,7 +3,7 @@
 #include "general.h"
 void PID_startup();
 void PID_run();
-float calculateAnglePID(float reference, float position);
+float calculateAnglePID(float reference, float position, float velocity);
 float calculateSpeedPID(float reference, float velocity);
 int getPosition();
 

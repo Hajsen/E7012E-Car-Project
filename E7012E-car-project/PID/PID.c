@@ -11,7 +11,7 @@
 #define REFERENCE_VELOCITY 5.0f
 #define REFERENCE_FACTOR 0.15f
 
-static float const Ki_ANGLE = 2.0f;
+static float const Ki_ANGLE = 0.5f;
 static float const Kp_ANGLE = 6.0f;
 static float const Kd_ANGLE = 0.0f;
 static float const Ki_SPEED = 0.1f;
@@ -34,7 +34,7 @@ void PID_run()
 		float velocity_reference = REFERENCE_FACTOR * ( REFERENCE_VELOCITY
 			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)
 			- REFERENCE_SPEED_CORRECTION*abs(sensorStatus.line_value));
-		newAngle = calculateAnglePID(angle_reference, angle_measurement);
+		newAngle = calculateAnglePID(angle_reference, angle_measurement, velocity);
 		newSpeed = calculateSpeedPID(velocity_reference, velocity);		
 }
 
@@ -44,22 +44,26 @@ void PID_run()
 * PID for wheel angle
 *
 */
-float calculateAnglePID(float reference, float position)
+float calculateAnglePID(float reference, float position, float velocity)
 {
 
 	// declare variables
 	static float pre_error=0;
 	static float integral=0;
 	float new_integral;
-	float derivative;
+	float derivative = 0;
 	float error;
 	float angle;
 	
 	// calculate error
 	error = reference - position;
-
-	derivative = ( error - pre_error ) / dt;
-	angle = Kp_ANGLE*error + Ki_ANGLE*integral + Kd_ANGLE * derivative;
+	float dx = max(dt*velocity,0.01);
+	if(dx>0.00001f)
+	{
+		derivative = ( error - pre_error ) / dx;
+	}
+	new_integral = dx*error;
+	angle = Kp_ANGLE*error + Ki_ANGLE*new_integral + Kd_ANGLE * derivative;
 
 
 	// Anti windup integral
@@ -97,7 +101,7 @@ float calculateSpeedPID(float reference, float velocity)
 	static float pre_error=0;
 	static float integral=0;
 	float new_integral;
-	float derivative;
+	float derivative=0;
 	float error;
 	float speed;
 	// calculate error
@@ -106,13 +110,16 @@ float calculateSpeedPID(float reference, float velocity)
 
 
 
+	float dx = max(dt*velocity,0.01);
 
 
-	new_integral = integral + error * dt;
+	new_integral = integral + error * dx;
 
 	
-
-	derivative = ( error - pre_error ) / dt;
+	if(dx>0.00001f)
+	{
+		derivative = ( error - pre_error ) / dx;
+	}
 	speed = Kp_SPEED*error + Ki_SPEED*new_integral + Kd_SPEED* derivative;
 
 	if((speed < MAX_SPEED && new_integral>integral)
