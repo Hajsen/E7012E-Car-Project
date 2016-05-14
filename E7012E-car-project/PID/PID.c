@@ -7,15 +7,15 @@
 
 #define REFERENCE_ANGLE_CORRECTION  1.0f
 #define REFERENCE_SPEED_CORRECTION 0.25f
-#define REFERENCE_SPEED_CORRECTION_FORWARD  0.9f
+#define REFERENCE_SPEED_CORRECTION_FORWARD  1.1f
 #define REFERENCE_VELOCITY 5.0f
-#define REFERENCE_FACTOR 0.15f
-
+#define REFERENCE_FACTOR 0.20f
+#define MIN_DX 0.001
 static float const Ki_ANGLE = 0.5f;
-static float const Kp_ANGLE = 6.0f;
+static float const Kp_ANGLE = 6.4f;
 static float const Kd_ANGLE = 0.0f;
 static float const Ki_SPEED = 0.1f;
-static float const Kp_SPEED = 0.2f;
+static float const Kp_SPEED = 0.3f;
 static float const Kd_SPEED = 0.0f;
 
 
@@ -57,8 +57,8 @@ float calculateAnglePID(float reference, float position, float velocity)
 	
 	// calculate error
 	error = reference - position;
-	float dx = max(dt*velocity,0.01);
-	if(dx>0.00001f)
+	float dx = max(dt*velocity,MIN_DX);
+	if(dx>0.00001f)//Prevent division by 0
 	{
 		derivative = ( error - pre_error ) / dx;
 	}
@@ -110,13 +110,13 @@ float calculateSpeedPID(float reference, float velocity)
 
 
 
-	float dx = max(dt*velocity,0.01);
+	float dx = max(dt*velocity,MIN_DX);
 
 
 	new_integral = integral + error * dx;
 
 	
-	if(dx>0.00001f)
+	if(dx>0.00001f)//Prevent division by 0
 	{
 		derivative = ( error - pre_error ) / dx;
 	}
