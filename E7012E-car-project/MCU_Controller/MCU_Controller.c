@@ -8,7 +8,7 @@
 // 3 modes, -1 0 and 1. 
 // 321 is .1 ms
 
-
+int bogus_line = 0;
 
 
 //-----------TESTING-------------------------
@@ -55,11 +55,33 @@ void readSteeringSensors(){
 	// Read pin 6/7 on Port C
 	int sensor_forward = ((PINC)>>PINC6) & 0b11;
 	
-	if(sensor_forward!=0)
+	float new_forward_line = ((1 & (sensor_forward)) -(1 & (sensor_forward>>1)));
+	if(bogus_line==1 && new_forward_line==0)
+	{
+		if(sensor_forward==0)
+		{
+			bogus_line = 0;
+		}
+		else
+		{
+			bogus_line = 2;
+		}
+	}
+	if(bogus_line==2 && ((sensorStatus.forward_line_value>=2.0f && new_forward_line<0)||(sensorStatus.forward_line_value<=-2.0f && new_forward_line>0)))
+	{
+		bogus_line = 1;
+	}
+	if(sensor_forward!=0 && !bogus_line)
 	{
 		//If forward sensor is on, calculate positive negative or zero value
-		sensorStatus.forward_line_value =
-			((1 & (sensor_forward)) -(1 & (sensor_forward>>1)));
+		if((sensorStatus.forward_line_value>=2.0f && new_forward_line<0)||(sensorStatus.forward_line_value<=-2.0f && new_forward_line>0))
+		{
+			bogus_line = 1;
+		}
+		else
+		{	
+			sensorStatus.forward_line_value = new_forward_line;
+		}
 	}
 	else
 	{

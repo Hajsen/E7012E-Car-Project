@@ -16,7 +16,7 @@
 
 static float const Ki_ANGLE = 1.5f;
 static float const Kp_ANGLE = 7.4f;
-static float const Kd_ANGLE = 1.0f;
+static float const Kd_ANGLE = 0.8f;
 static float const Ki_SPEED = 0.1f;
 static float const Kp_SPEED = 0.2f;
 static float const Kd_SPEED = 0.0f;
@@ -32,7 +32,12 @@ void PID_startup()
 // run controller
 void PID_run()
 {
+		
 		float angle_reference = -sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
+		if((sensorStatus.forward_line_value<-1 && sensorStatus.line_value>1.5)||(sensorStatus.forward_line_value>1 && sensorStatus.line_value<-1.5))
+		{
+			angle_reference-=sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
+		}
 		float angle_measurement = sensorStatus.line_value;
 		float velocity_reference = REFERENCE_FACTOR * ( REFERENCE_VELOCITY
 			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)
@@ -56,6 +61,7 @@ float calculateAnglePID(float reference, float position, float vel)
 	// declare variables
 	static float pre_error=0;
 	static float integral=0;
+	static float avg_derivative = 0;
 	float new_integral;
 	float derivative = 0;
 	float error;
@@ -64,12 +70,14 @@ float calculateAnglePID(float reference, float position, float vel)
 	// calculate error
 	error = reference - position;
 	float dx = max(dt*vel,MIN_DX);
+	avg_derivative *= 0.9;
 	if(dx>0.00001f)//Prevent division by 0
 	{
 		derivative = ( error - pre_error ) / dx;
+		avg_derivative += derivative * 0.02;
 	}
 	new_integral = integral + dx*error;
-	angle = Kp_ANGLE*error + Ki_ANGLE*new_integral + Kd_ANGLE * derivative;
+	angle = Kp_ANGLE*error + Ki_ANGLE*new_integral + Kd_ANGLE * avg_derivative;
 
 
 	// Anti windup integral
