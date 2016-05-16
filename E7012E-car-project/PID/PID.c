@@ -14,9 +14,9 @@
 #define MIN_DX 0.001
 
 
-static float const Ki_ANGLE = 4.0f;
-static float const Kp_ANGLE = 6.4f;
-static float const Kd_ANGLE = 0.1f;
+static float const Ki_ANGLE = 1.5f;
+static float const Kp_ANGLE = 7.4f;
+static float const Kd_ANGLE = 1.0f;
 static float const Ki_SPEED = 0.1f;
 static float const Kp_SPEED = 0.2f;
 static float const Kd_SPEED = 0.0f;
