@@ -5,11 +5,11 @@
 #include "math.h"
 
 
-#define REFERENCE_ANGLE_CORRECTION  0.8f
+#define REFERENCE_ANGLE_CORRECTION  0.5f
 #define REFERENCE_SPEED_CORRECTION 0.235f
 #define REFERENCE_SPEED_CORRECTION_FORWARD  0.93f
 #define REFERENCE_VELOCITY 5.0f
-#define REFERENCE_FACTOR 0.275f
+#define REFERENCE_FACTOR 0.29f
 #define MIN_REFERENCE_SPEED 3.0f
 #define MIN_DX 0.001
 
@@ -36,7 +36,7 @@ void PID_run()
 		float angle_reference = -sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
 		if((sensorStatus.forward_line_value<-1 && sensorStatus.line_value>1.5)||(sensorStatus.forward_line_value>1 && sensorStatus.line_value<-1.5))
 		{
-			angle_reference-=sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION;
+			angle_reference-=sensorStatus.forward_line_value*REFERENCE_ANGLE_CORRECTION*2.2;
 		}
 		float angle_measurement = sensorStatus.line_value;
 		float velocity_reference = REFERENCE_FACTOR * ( REFERENCE_VELOCITY
