@@ -104,7 +104,7 @@ void readSteeringSensors(){
 	float average_value = total_value/sensors_on;
 	
 	//Use old value if sensor data is poor
-	if(sensors_on>1)
+	if(sensors_on>1 && abs(average_value-sensorStatus.line_value)<3.0f)
 	{
 		sensorStatus.line_value = average_value;
 	}

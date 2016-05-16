@@ -10,12 +10,15 @@
 #define REFERENCE_SPEED_CORRECTION_FORWARD  0.93f
 #define REFERENCE_VELOCITY 5.0f
 #define REFERENCE_FACTOR 0.275f
+#define MIN_REFERENCE_SPEED 2.0f
 #define MIN_DX 0.001
-static float const Ki_ANGLE = 0.35f;
+
+
+static float const Ki_ANGLE = 4.0f;
 static float const Kp_ANGLE = 6.4f;
 static float const Kd_ANGLE = 0.1f;
 static float const Ki_SPEED = 0.1f;
-static float const Kp_SPEED = 0.3f;
+static float const Kp_SPEED = 0.2f;
 static float const Kd_SPEED = 0.0f;
 
 
@@ -34,6 +37,9 @@ void PID_run()
 		float velocity_reference = REFERENCE_FACTOR * ( REFERENCE_VELOCITY
 			- REFERENCE_SPEED_CORRECTION_FORWARD*abs(sensorStatus.forward_line_value)
 			- REFERENCE_SPEED_CORRECTION*abs(sensorStatus.line_value));
+
+		velocity_reference  = max(velocity_reference, REFERENCE_FACTOR * MIN_REFERENCE_SPEED);
+		
 		newAngle = calculateAnglePID(angle_reference, angle_measurement, velocity);
 		newSpeed = calculateSpeedPID(velocity_reference, velocity);		
 }
@@ -44,7 +50,7 @@ void PID_run()
 * PID for wheel angle
 *
 */
-float calculateAnglePID(float reference, float position, float velocity)
+float calculateAnglePID(float reference, float position, float vel)
 {
 
 	// declare variables
@@ -57,12 +63,12 @@ float calculateAnglePID(float reference, float position, float velocity)
 	
 	// calculate error
 	error = reference - position;
-	float dx = max(dt*velocity,MIN_DX);
+	float dx = max(dt*vel,MIN_DX);
 	if(dx>0.00001f)//Prevent division by 0
 	{
 		derivative = ( error - pre_error ) / dx;
 	}
-	new_integral = dx*error;
+	new_integral = integral + dx*error;
 	angle = Kp_ANGLE*error + Ki_ANGLE*new_integral + Kd_ANGLE * derivative;
 
 
@@ -94,7 +100,7 @@ float calculateAnglePID(float reference, float position, float velocity)
 * PID for motor speed
 *
 */
-float calculateSpeedPID(float reference, float velocity)
+float calculateSpeedPID(float reference, float vel)
 {
 
 	// declare variables
@@ -105,20 +111,20 @@ float calculateSpeedPID(float reference, float velocity)
 	float error;
 	float speed;
 	// calculate error
-	error = reference-velocity;
+	error = reference-vel;
 	//error = error>0.0f?error:-error;
 
 
 
-	float dx = max(dt*velocity,MIN_DX);
+	float dx = max(dt*vel,MIN_DX);
 
 
-	new_integral = integral + error * dx;
+	new_integral = integral + error * dt;
 
 	
 	if(dx>0.00001f)//Prevent division by 0
 	{
-		derivative = ( error - pre_error ) / dx;
+		derivative = ( error - pre_error ) / dt;
 	}
 	speed = Kp_SPEED*error + Ki_SPEED*new_integral + Kd_SPEED* derivative;
 
@@ -126,6 +132,10 @@ float calculateSpeedPID(float reference, float velocity)
 		|| (speed > MIN_SPEED && new_integral<integral))
 	{
 		integral = new_integral;
+	}
+	else
+	{
+		DEBUG(0);
 	}
 	// Keep output within allowed range
 	if(speed > MAX_SPEED)
